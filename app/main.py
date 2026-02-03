@@ -13,6 +13,7 @@ def chat(req: ChatRequest):
         "message": req.message,
         "order_id": req.order_id,
         "email": req.email,
+        "session_id": req.session_id,
         "actions": [],
         "reply": "",
         "case_id": None,

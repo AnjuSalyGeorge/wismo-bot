@@ -1,15 +1,22 @@
 from app.models import Order
-
-MOCK_ORDERS = {
-    "A1001": Order(order_id="A1001", email="anju@example.com", value=120.0, tracking_id="T9001"),
-    "A2002": Order(order_id="A2002", email="anju@example.com", value=420.0, tracking_id="T9002"),  # high value
-}
+from app.config import get_firestore_client
 
 
 def get_order(order_id: str, email: str) -> Order:
-    order = MOCK_ORDERS.get(order_id)
-    if not order:
+    db = get_firestore_client()
+    doc = db.collection("orders").document(order_id).get()
+
+    if not doc.exists:
         raise ValueError("Order not found.")
-    if order.email.lower() != email.lower():
+
+    data = doc.to_dict() or {}
+    stored_email = str(data.get("email", "")).lower()
+    if stored_email != email.lower():
         raise PermissionError("Email does not match order.")
-    return order
+
+    return Order(
+        order_id=data["order_id"],
+        email=data["email"],
+        value=float(data["value"]),
+        tracking_id=data["tracking_id"],
+    )

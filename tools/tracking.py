@@ -1,31 +1,29 @@
 from app.models import Shipment, TrackingEvent
-
-MOCK_SHIPMENTS = {
-    "T9001": Shipment(
-        tracking_id="T9001",
-        carrier="MockCarrier",
-        current_status="in_transit",
-        timeline=[
-            TrackingEvent(ts="2026-01-28T10:00:00Z", status="label_created", location="Toronto"),
-            TrackingEvent(ts="2026-01-29T09:00:00Z", status="picked_up", location="Toronto"),
-            TrackingEvent(ts="2026-01-31T18:00:00Z", status="in_transit", location="Mississauga"),
-        ],
-    ),
-    "T9002": Shipment(
-        tracking_id="T9002",
-        carrier="MockCarrier",
-        current_status="delivered",
-        timeline=[
-            TrackingEvent(ts="2026-01-25T11:00:00Z", status="picked_up", location="Toronto"),
-            TrackingEvent(ts="2026-01-27T09:30:00Z", status="out_for_delivery", location="Windsor"),
-            TrackingEvent(ts="2026-01-27T15:10:00Z", status="delivered", location="Windsor"),
-        ],
-    ),
-}
+from app.config import get_firestore_client
 
 
 def get_tracking(tracking_id: str) -> Shipment:
-    shipment = MOCK_SHIPMENTS.get(tracking_id)
-    if not shipment:
+    db = get_firestore_client()
+    doc = db.collection("shipments").document(tracking_id).get()
+
+    if not doc.exists:
         raise ValueError("Tracking not found.")
-    return shipment
+
+    data = doc.to_dict() or {}
+    timeline_raw = data.get("timeline", []) or []
+
+    timeline = [
+        TrackingEvent(
+            ts=e.get("ts", ""),
+            status=e.get("status", ""),
+            location=e.get("location"),
+        )
+        for e in timeline_raw
+    ]
+
+    return Shipment(
+        tracking_id=data["tracking_id"],
+        carrier=data.get("carrier", "unknown"),
+        current_status=data.get("current_status", "unknown"),
+        timeline=timeline,
+    )
