@@ -7,7 +7,13 @@ from tools.cases import create_case, count_recent_claims_by_email
 from tools.logs import log_action
 
 from policies.rules import recommended_action
+from policies.diagnosis import diagnose
 from app.models import Order, Shipment
+
+
+# Only apply repeat-claims escalation for these diagnosis labels
+REPEAT_CLAIM_LABELS = {"delivered_not_received"}
+REPEAT_CLAIM_THRESHOLD = 2  # N; 3rd+ within 60 days triggers escalation
 
 
 class GraphState(TypedDict, total=False):
@@ -22,6 +28,9 @@ class GraphState(TypedDict, total=False):
 
     order: Dict[str, Any]
     shipment: Dict[str, Any]
+
+    # ✅ add diagnosis to state so other logic can read it
+    diagnosis: Dict[str, Any]
 
 
 def intake_node(state: GraphState) -> GraphState:
@@ -72,21 +81,27 @@ def decide_node(state: GraphState) -> GraphState:
     state.setdefault("actions", [])
     sid = state.get("session_id", "unknown")
 
-    # If retrieve failed, a reply is already set
     if not state.get("order") or not state.get("shipment"):
         return state
 
     order = Order(**state["order"])
     shipment = Shipment(**state["shipment"])
+    message = state.get("message", "")
 
-    # Base policy decision (pure rules)
-    action = recommended_action(order, shipment)
+    # --- Day 5: Diagnosis (messy real-world interpretation) ---
+    diag = diagnose(message, shipment)
+    diag_payload = {"label": diag.label, "confidence": diag.confidence, "notes": diag.notes}
 
-    # Day 4 rule: Repeated claims > N in 60 days => escalate
-    # (We count cases for this email within last 60 days)
-    REPEAT_CLAIM_THRESHOLD = 2  # N; so 3rd+ claim triggers escalation
+    log_action(sid, "diagnosis", diag_payload)
+    state["diagnosis"] = {"label": diag.label, "confidence": diag.confidence}
+    state["actions"].append({"diagnosis": {"label": diag.label, "confidence": diag.confidence}})
 
-    if getattr(order, "email", None):
+    # --- Base policy decision (rules.py) ---
+    action = recommended_action(order, shipment, message=message)
+
+    # --- Day 4: Repeat-claims override (ONLY for delivered_not_received) ---
+    # ✅ This fixes your "stuck in transit" incorrectly escalating.
+    if diag.label in REPEAT_CLAIM_LABELS and getattr(order, "email", None):
         try:
             recent_claims = count_recent_claims_by_email(order.email, days=60)
             log_action(
@@ -94,7 +109,6 @@ def decide_node(state: GraphState) -> GraphState:
                 "policy_check",
                 {"rule": "repeat_claims_60d", "email": order.email, "count": recent_claims},
             )
-
             if recent_claims > REPEAT_CLAIM_THRESHOLD:
                 action = "escalate"
                 log_action(
@@ -103,14 +117,34 @@ def decide_node(state: GraphState) -> GraphState:
                     {"rule": "repeat_claims_60d", "forced_action": "escalate"},
                 )
         except Exception as e:
-            # If claim counting fails, we do not block the request.
             log_action(sid, "error", {"where": "repeat_claim_check", "error": repr(e)})
 
-    # Now log the FINAL decision
+    # Log FINAL decision
     log_action(sid, "decision", {"decision": action})
     state["actions"].append({"decision": action})
 
-    # Returned to sender flow: verify address (NO case created yet)
+    # --- Day 5: Follow-up questions (ask only when needed) ---
+    if diag.label == "delivery_attempted":
+        state["reply"] = (
+            "It looks like a delivery was attempted.\n"
+            "Quick questions so we can resolve this:\n"
+            "1) Is there a unit/apt/buzzer code or gate access?\n"
+            "2) What’s the best phone number for the courier?\n"
+            "3) Do you prefer re-delivery or pickup at a nearby location?"
+        )
+        return state
+
+    if diag.label == "damaged":
+        state["reply"] = (
+            "Sorry about that — it looks like the package may be damaged.\n"
+            "Please confirm:\n"
+            "1) Is the outer box damaged, the item damaged, or both?\n"
+            "2) Do you prefer a replacement or a refund?\n"
+            "If you have a photo, you can upload it too."
+        )
+        return state
+
+    # Returned to sender: verify address step (no case yet)
     if action == "verify_address":
         state["reply"] = (
             "Your package was returned to sender. Let’s confirm your shipping address so we can resend it.\n"
@@ -122,24 +156,29 @@ def decide_node(state: GraphState) -> GraphState:
         )
         return state
 
-    # Create a case ONLY for open_investigation
+    # Create a case ONLY for open_investigation (high-value / high-risk)
     if action == "open_investigation":
         case_id = create_case(
             order.order_id,
             reason="shipping_exception",
-            user_message=state.get("message", ""),
+            user_message=message,
             email=order.email,
         )
         log_action(sid, "tool_call", {"tool": "create_case", "case_id": case_id})
         state["case_id"] = case_id
         state["actions"].append({"tool": "create_case", "case_id": case_id})
 
-    # Escalate always creates a case
+        state["reply"] = (
+            f"I opened an investigation ({case_id}). A support agent will review and follow up."
+        )
+        return state
+
+    # Escalate creates a case
     if action == "escalate":
         case_id = create_case(
             order.order_id,
             reason="escalate",
-            user_message=state.get("message", "escalation requested"),
+            user_message=message or "escalation requested",
             email=order.email,
         )
         log_action(sid, "tool_call", {"tool": "create_case", "case_id": case_id})
@@ -152,32 +191,28 @@ def decide_node(state: GraphState) -> GraphState:
         )
         return state
 
-    # Replies for remaining actions
-    if action == "open_investigation":
+    # Delivered checklist path (no case)
+    if action == "advise_wait_then_investigate":
         state["reply"] = (
-            f"I see a shipping issue. Because this is a higher-value order, "
-            f"I opened an investigation ({state.get('case_id')}). A support agent will review and follow up."
-        )
-
-    elif action == "advise_wait_then_investigate":
-        state["reply"] = (
-            "It’s marked delivered within the last 24 hours. Here’s a quick checklist:\n"
+            "It’s marked delivered recently. Here’s a quick checklist:\n"
             "• Check mailbox/porch/garage and any side doors\n"
             "• Check with neighbors/household members\n"
             "• If you’re in an apartment/condo: check mailroom, concierge, parcel lockers\n"
             "• Look for a carrier photo or delivery note (if available)\n\n"
             "If you still can’t find it after 24 hours, reply here and I’ll open an investigation."
         )
+        return state
 
-    elif action == "reassure_and_monitor":
+    # In transit / delayed
+    if action == "reassure_and_monitor":
         state["reply"] = (
             "Your shipment is in transit. If it doesn’t move for 48 hours, "
             "I can open a carrier investigation."
         )
+        return state
 
-    else:
-        state["reply"] = "I’m not fully sure what’s happening. I can escalate this to a human support agent."
-
+    # Fallback
+    state["reply"] = "I’m not fully sure what’s happening. I can escalate this to a human support agent."
     return state
 
 
