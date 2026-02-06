@@ -1,0 +1,6 @@
+prompts:
+  - name: intent
+    version: v1
+    file: prompts/intent_v1.md
+    description: "Classify user intent + extract order/email + output strict JSON only"
+
