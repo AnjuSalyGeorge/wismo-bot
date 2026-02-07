@@ -1,13 +1,10 @@
+# tools/cases.py
 from datetime import datetime, timezone, timedelta
 import uuid
 from typing import Optional
 
 from app.config import get_firestore_client
 
-
-# --------------------------------------------------
-# Helpers
-# --------------------------------------------------
 
 def _now_iso() -> str:
     """Current UTC time in Firestore-friendly ISO format"""
@@ -25,19 +22,18 @@ def _parse_ts(ts: Optional[str]) -> Optional[datetime]:
         return None
 
 
-# --------------------------------------------------
-# Case creation
-# --------------------------------------------------
-
 def create_case(
     order_id: str,
     reason: str,
     user_message: str,
     email: Optional[str] = None,
+    handoff_note: Optional[str] = None,   # ✅ new
+    session_id: Optional[str] = None,     # ✅ new (optional)
 ) -> str:
     """
     Creates a support case in Firestore.
     Email is stored so we can detect repeated claims.
+    handoff_note is stored for human agent handoff.
     """
     db = get_firestore_client()
 
@@ -54,20 +50,20 @@ def create_case(
 
     if email:
         doc["email"] = email
+    if session_id:
+        doc["session_id"] = session_id
+    if handoff_note:
+        doc["handoff_note"] = handoff_note
 
     db.collection("cases").document(case_id).set(doc)
     return case_id
 
 
-# --------------------------------------------------
-# Repeat-claim detection (NO composite index needed)
-# --------------------------------------------------
-
 def count_recent_claims_by_email(email: str, days: int = 60) -> int:
     """
     Counts cases for this email in the last N days.
 
-    👉 Implementation avoids Firestore composite indexes
+       Implementation avoids Firestore composite indexes
        by querying ONLY on email and filtering by date in Python.
     """
     db = get_firestore_client()
@@ -77,16 +73,11 @@ def count_recent_claims_by_email(email: str, days: int = 60) -> int:
     q = db.collection("cases").where("email", "==", email)
 
     count = 0
-
     for doc in q.stream():
         data = doc.to_dict() or {}
-
         created_at = data.get("created_at")
         dt = _parse_ts(created_at)
-
         if dt and dt >= cutoff:
             count += 1
 
     return count
-
-
