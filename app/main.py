@@ -1,39 +1,122 @@
-from fastapi import FastAPI
-from app.models import ChatRequest, ChatResponse
+from fastapi import FastAPI, Depends, Request, HTTPException
+from app.models import ChatRequest
 from app.graph import build_graph
+from app.security import require_api_key
+from tools.rate_limit import check_rate_limit
+from tools.logs import log_action
 
 app = FastAPI(title="WISMO Bot")
 
 graph = build_graph()
 
 
-@app.post("/chat", response_model=ChatResponse)
-def chat(req: ChatRequest):
+def _extract_llm_fields(actions: list[dict]) -> dict:
+    intent = None
+    missing_fields = []
+    confidence = None
+    risk_flags = []
+
+    for a in reversed(actions or []):
+        if "llm_intent" in a and isinstance(a["llm_intent"], dict):
+            li = a["llm_intent"]
+            intent = li.get("intent")
+            missing_fields = li.get("missing_fields") or []
+            confidence = li.get("confidence")
+            risk_flags = li.get("risk_flags") or []
+            break
+
+    return {
+        "intent": intent,
+        "missing_fields": missing_fields,
+        "llm_confidence": confidence,
+        "risk_flags": risk_flags,
+    }
+
+
+# ---- Day 8 Guardrails ----
+MAX_MESSAGE_CHARS = 2000  # reject huge payloads (basic abuse guard)
+
+
+@app.post("/chat")
+def chat(
+    req: ChatRequest,
+    request: Request,
+    caller=Depends(require_api_key),  # ✅ API key auth (from app/security.py)
+):
+    """
+    Protected endpoint:
+    - Requires X-API-Key (unless API_KEY env not set -> dev mode allowed)
+    - Rate limited per minute per (api_key + ip)
+    - Rejects huge messages
+    """
+    sid = req.session_id or "unknown"
+
+    api_key = caller.get("api_key", "unknown")
+    ip = caller.get("ip", request.client.host if request.client else "unknown")
+
+    # 1) Payload size guard
+    msg = req.message or ""
+    if len(msg) > MAX_MESSAGE_CHARS:
+        log_action(
+            sid,
+            "blocked_request",
+            {
+                "reason": "message_too_long",
+                "length": len(msg),
+                "max": MAX_MESSAGE_CHARS,
+                "ip": ip,
+                "api_key": api_key,
+            },
+        )
+        raise HTTPException(
+            status_code=413,
+            detail=f"Message too long. Max allowed is {MAX_MESSAGE_CHARS} characters.",
+        )
+
+    # 2) Rate limit guard
+    rl = check_rate_limit(api_key=api_key, ip=ip, limit_per_min=30)
+    if not rl["allowed"]:
+        log_action(
+            sid,
+            "blocked_request",
+            {
+                "reason": "rate_limited",
+                "ip": ip,
+                "api_key": api_key,
+                "count": rl["count"],
+                "limit": rl["limit"],
+                "bucket": rl["bucket"],
+            },
+        )
+        raise HTTPException(
+            status_code=429,
+            detail="Too many requests. Please wait a minute and try again.",
+        )
+
+    # Run the graph
     state = {
         "message": req.message,
         "order_id": req.order_id,
         "email": req.email,
-        "session_id": req.session_id,
+        "session_id": sid,
         "actions": [],
         "reply": "",
         "case_id": None,
-        # Day 6 additions (LLM output fields)
-        "intent": None,
-        "risk_flags": [],
-        "missing_fields": [],
-        "llm_confidence": None,
     }
 
     out = graph.invoke(state)
+    actions = out.get("actions", [])
+    llm_fields = _extract_llm_fields(actions)
 
-    # Keep response backwards-compatible:
-    # reply/actions/case_id are still there.
-    # intent/risk_flags/missing_fields/confidence are embedded in actions (or can be added to ChatResponse later).
-    return ChatResponse(
-        reply=out.get("reply", ""),
-        actions_taken=out.get("actions", []),
-        case_id=out.get("case_id"),
-    )
+    return {
+        "reply": out.get("reply", ""),
+        "intent": llm_fields["intent"],
+        "missing_fields": llm_fields["missing_fields"],
+        "llm_confidence": llm_fields["llm_confidence"],
+        "risk_flags": llm_fields["risk_flags"],
+        "actions_taken": actions,
+        "case_id": out.get("case_id"),
+    }
 
 
 @app.get("/health")
