@@ -1,3 +1,4 @@
+# app/graph.py
 from typing import TypedDict, List, Dict, Any, Optional
 
 from langgraph.graph import StateGraph, END
@@ -44,27 +45,77 @@ class GraphState(TypedDict, total=False):
     shipment: Dict[str, Any]
 
 
+COMPLAINT_KEYWORDS = [
+    "not received", "did not receive", "didn't receive", "didnt receive",
+    "delivered but", "still not received",
+    "stuck", "not moving", "delayed", "delay",
+    "attempt", "attempted",
+    "damag", "broken",
+    "return", "returned", "rts",
+    "lost", "missing",
+]
+
+FOLLOWUP_HINTS = ["still", "same", "again", "no update", "not yet", "any update", "didn't get"]
+
+
+def _has_complaint_keywords(msg: str) -> bool:
+    m = (msg or "").strip().lower()
+    return any(k in m for k in COMPLAINT_KEYWORDS)
+
+
 def _is_details_only_message(msg: str, out) -> bool:
     """
     If the user is mostly just sending missing fields (order/email),
-    reuse prior intent and complaint from session to avoid LLM drift.
+    reuse prior intent/complaint from session to avoid LLM drift.
     """
     m = (msg or "").strip().lower()
 
-    complaint_keywords = [
-        "not received", "did not receive", "didn't receive",
-        "delivered but", "stuck", "not moving", "delayed",
-        "attempt", "attempted", "damaged", "broken", "return", "returned",
-        "lost", "missing",
-    ]
-    if any(k in m for k in complaint_keywords):
+    # If user explicitly complains, it's not details-only
+    if _has_complaint_keywords(m):
         return False
 
     has_emailish = ("@" in m and "." in m)
     has_orderish = ("order" in m) or any(ch.isdigit() for ch in m)
 
+    # Many models label details as track_order with extracted fields
     looks_like_details = (out.intent == "track_order") and (out.extracted_order_id or out.extracted_email)
-    return looks_like_details and (has_orderish or has_emailish)
+    return bool(looks_like_details and (has_orderish or has_emailish))
+
+
+def _should_reuse_last_intent(msg: str, sess: Dict[str, Any], out) -> bool:
+    """
+    Reuse last intent when user is doing a short follow-up like:
+    - "still not received"
+    - "any update?"
+    and the session already has an ongoing context.
+    """
+    if not sess.get("last_intent"):
+        return False
+
+    m = (msg or "").strip().lower()
+
+    # Details-only should keep last intent (common follow-up case)
+    if _is_details_only_message(msg, out):
+        return True
+
+    followupish = any(h in m for h in FOLLOWUP_HINTS) or _has_complaint_keywords(m)
+    no_new_entities = (not out.extracted_order_id) and (not out.extracted_email) and ("@" not in m)
+    shortish = len(m) <= 80
+
+    return bool(followupish and no_new_entities and shortish)
+
+
+def _looks_like_pure_lookup(msg: str) -> bool:
+    """
+    Brand-new session message that is only order/email (no complaint).
+    Example: "A1004 anju@example.com" or "Order A1004, anju@example.com"
+    """
+    m = (msg or "").strip().lower()
+    if not m:
+        return False
+    has_email = ("@" in m and "." in m)
+    has_order = ("order" in m) or any(ch.isdigit() for ch in m)
+    return bool(has_email and has_order and len(m) < 120 and not _has_complaint_keywords(m))
 
 
 def intake_node(state: GraphState) -> GraphState:
@@ -95,30 +146,13 @@ def understand_node(state: GraphState) -> GraphState:
     sess = state.get("session") or {}
 
     out = infer_intent(msg)
-    details_only = _is_details_only_message(msg, out)
 
+    # Decide intent (reuse last intent on details-only / follow-up)
     intent = out.intent
-    if details_only and sess.get("last_intent"):
-        intent = sess["last_intent"]
+    if _should_reuse_last_intent(msg, sess, out):
+        intent = sess.get("last_intent") or intent
 
-    payload = {
-        "intent": intent,
-        "extracted_order_id": out.extracted_order_id,
-        "extracted_email": out.extracted_email,
-        "missing_fields": out.missing_fields,
-        "risk_flags": out.risk_flags,
-        "confidence": out.confidence,
-        "suggested_next_action": out.suggested_next_action,
-    }
-
-    state["llm_intent"] = payload
-    log_action(sid, "llm_intent", payload)
-
-    state["actions"].append(
-        {"llm_intent": {"intent": intent, "missing_fields": out.missing_fields, "confidence": out.confidence}}
-    )
-
-    # Fill order/email:
+    # Fill order/email priority:
     # 1) request body
     # 2) LLM extracted
     # 3) session memory
@@ -132,12 +166,42 @@ def understand_node(state: GraphState) -> GraphState:
     if not state.get("email") and sess.get("email"):
         state["email"] = sess["email"]
 
+    # ✅ Compute missing fields AFTER filling
+    still_missing: List[str] = []
+    if not state.get("order_id"):
+        still_missing.append("order_id")
+    if not state.get("email"):
+        still_missing.append("email")
+
+    # Build payload (store full info for debugging)
+    payload = {
+        "intent": intent,
+        "extracted_order_id": out.extracted_order_id,
+        "extracted_email": out.extracted_email,
+        "missing_fields": still_missing,  # ✅ final truth
+        "risk_flags": out.risk_flags,
+        "confidence": out.confidence,
+        "suggested_next_action": "ask_followup" if still_missing else "proceed",
+    }
+
+    state["llm_intent"] = payload
+    log_action(sid, "llm_intent", payload)
+
+    # ✅ Log minimal for API output (also use final missing_fields)
+    state["actions"].append(
+        {"llm_intent": {"intent": intent, "missing_fields": still_missing, "confidence": out.confidence}}
+    )
+
+    # Persist known values + intent
     patch: Dict[str, Any] = {
         "order_id": state.get("order_id"),
         "email": state.get("email"),
         "last_intent": intent,
+        "missing_fields": still_missing,
     }
-    if not details_only:
+
+    # Only update last_complaint if NOT details-only
+    if not _is_details_only_message(msg, out):
         patch["last_complaint"] = msg
 
     try:
@@ -145,12 +209,7 @@ def understand_node(state: GraphState) -> GraphState:
     except Exception as e:
         log_action(sid, "error", {"where": "understand_node:update_session", "error": repr(e)})
 
-    still_missing: List[str] = []
-    if not state.get("order_id"):
-        still_missing.append("order_id")
-    if not state.get("email"):
-        still_missing.append("email")
-
+    # If still missing, ask follow-up and STOP
     if still_missing:
         question = (
             "To help you, I need a couple details:\n"
@@ -251,6 +310,24 @@ def decide_node(state: GraphState) -> GraphState:
     order = Order(**state["order"])
     shipment = Shipment(**state["shipment"])
 
+    sess = state.get("session") or {}
+    raw_message = state.get("message", "") or ""
+    intent = (state.get("llm_intent") or {}).get("intent") or "track_order"
+
+    # ✅ NEW: Pure lookup should NOT trigger policy/diagnosis/escalation.
+    # This fixes eval t12/t16/t18 where users only provide order+email.
+    if intent == "track_order" and not sess.get("last_complaint") and _looks_like_pure_lookup(raw_message):
+        state["actions"].append({"decision": "status_update"})
+        state["reply"] = (
+            "Thanks — I found your order.\n"
+            f"Current shipment status: {shipment.current_status}."
+        )
+        try:
+            append_message(sid, "assistant", state["reply"])
+        except Exception:
+            pass
+        return state
+
     effective_message = _get_effective_message(state)
 
     diag = diagnose(effective_message, shipment)
@@ -264,7 +341,11 @@ def decide_node(state: GraphState) -> GraphState:
     if diag.label in REPEAT_CLAIM_LABELS and getattr(order, "email", None):
         try:
             recent_claims = count_recent_claims_by_email(order.email, days=60)
-            log_action(sid, "policy_check", {"rule": "repeat_claims_60d", "email": order.email, "count": recent_claims})
+            log_action(
+                sid,
+                "policy_check",
+                {"rule": "repeat_claims_60d", "email": order.email, "count": recent_claims},
+            )
             if recent_claims > REPEAT_CLAIM_THRESHOLD:
                 action = "escalate"
                 log_action(sid, "policy_override", {"rule": "repeat_claims_60d", "forced_action": "escalate"})
@@ -274,7 +355,7 @@ def decide_node(state: GraphState) -> GraphState:
     log_action(sid, "decision", {"decision": action})
     state["actions"].append({"decision": action})
 
-    # Follow-up questions (your existing ones)
+    # Follow-up questions
     if diag.label == "delivery_attempted":
         state["reply"] = (
             "It looks like a delivery was attempted.\n"
@@ -321,7 +402,7 @@ def decide_node(state: GraphState) -> GraphState:
         return state
 
     # -------------------------
-    # ✅ Case creation + reuse
+    # Case creation + reuse
     # -------------------------
     if action in {"open_investigation", "escalate"}:
         existing_case_id = None
@@ -330,7 +411,6 @@ def decide_node(state: GraphState) -> GraphState:
         except Exception as e:
             log_action(sid, "error", {"where": "decide_node:get_active_case_id", "error": repr(e)})
 
-        # Generate handoff note (always useful, even if reusing)
         handoff = generate_handoff(
             {
                 "order_id": order.order_id,
@@ -344,17 +424,14 @@ def decide_node(state: GraphState) -> GraphState:
         )
 
         if existing_case_id:
-            # Reuse the case
             state["case_id"] = existing_case_id
-            state["actions"].append(
-                {"tool": "reuse_case", "case_id": existing_case_id, "handoff_note": handoff}
-            )
+            state["actions"].append({"tool": "reuse_case", "case_id": existing_case_id, "handoff_note": handoff})
             log_action(sid, "case_reuse", {"case_id": existing_case_id})
 
             state["reply"] = (
-                f"I’m escalating this to a human support agent. "
+                "I’m escalating this to a human support agent. "
                 f"I already have an open case ({existing_case_id}) for this session. "
-                f"A support agent will follow up."
+                "A support agent will follow up."
             )
             try:
                 append_message(sid, "assistant", state["reply"])
@@ -362,7 +439,6 @@ def decide_node(state: GraphState) -> GraphState:
                 pass
             return state
 
-        # Create a new case and store in session
         reason = "shipping_exception" if action == "open_investigation" else "escalate"
 
         case_id = create_case(
@@ -370,8 +446,8 @@ def decide_node(state: GraphState) -> GraphState:
             reason=reason,
             user_message=effective_message or "escalation requested",
             email=order.email,
-            handoff_note=handoff,     # ✅ stored in Firestore case doc
-            session_id=sid,           # ✅ stored in Firestore case doc
+            handoff_note=handoff,
+            session_id=sid,
         )
 
         try:
@@ -387,7 +463,7 @@ def decide_node(state: GraphState) -> GraphState:
             state["reply"] = f"I opened an investigation ({case_id}). A support agent will review and follow up."
         else:
             state["reply"] = (
-                f"I’m escalating this to a human support agent. "
+                "I’m escalating this to a human support agent. "
                 f"I created a case ({case_id}). A support agent will follow up."
             )
 

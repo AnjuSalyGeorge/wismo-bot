@@ -1,0 +1,20 @@
+{"id":"t01","session_id":"eval_t01","message":"Delivered but not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
+{"id":"t02","session_id":"eval_t02","message":"It says delivered but I did not receive it","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
+{"id":"t03","session_id":"eval_t03","message":"Order A1004 delivered but not received. Email anju@example.com","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true,"expected_case_reason":"escalate"}
+{"id":"t04","session_id":"eval_t04","message":"Delivery was attempted today, what should I do?","expected_intent":"delivery_attempted","expected_followup":true,"expected_case_created":false}
+{"id":"t05","session_id":"eval_t05","message":"My package arrived damaged","expected_intent":"damaged","expected_followup":true,"expected_case_created":false}
+{"id":"t06","session_id":"eval_t06","message":"My order is stuck and not moving for 5 days","expected_intent":"stuck_in_transit","expected_followup":true,"expected_case_created":false}
+{"id":"t07","session_id":"eval_t07","message":"Tracking shows returned to sender","expected_intent":"return_to_sender","expected_followup":true,"expected_case_created":false}
+{"id":"t08","session_id":"eval_t08","message":"Where is my order?","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
+{"id":"t09","session_id":"eval_t09","message":"Order A1002 email test@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t10","session_id":"eval_t10","message":"Order A1003 email test@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t11","session_id":"eval_t11","message":"Order A1001 email test@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t12","session_id":"eval_t12","message":"Order A1004, anju@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t13","session_id":"eval_t13","message":"Delivered but not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
+{"id":"t14","session_id":"eval_t13","message":"Order A1004, anju@example.com","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true,"expected_case_reason":"escalate"}
+{"id":"t15","session_id":"eval_t13","message":"Still not received","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true,"expected_reuse_case":true}
+{"id":"t16","session_id":"eval_t16","message":"A1004 anju@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t17","session_id":"eval_t17","message":"Order A1004 delivered but not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
+{"id":"t18","session_id":"eval_t18","message":"Email anju@example.com order A1004","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t19","session_id":"eval_t19","message":"I want to cancel my subscription","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
+{"id":"t20","session_id":"eval_t20","message":"x","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
