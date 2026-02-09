@@ -46,40 +46,107 @@ def _render_intent_prompt(user_message: str) -> str:
 def _extract_json(text: str) -> Optional[dict]:
     """
     Extract first JSON object from text.
-    Handles models that sometimes add extra tokens.
+    Handles code fences and models that add extra tokens.
     """
+    if not text:
+        return None
+
+    text = text.strip()
+    text = re.sub(r"^```(?:json)?\s*", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"\s*```$", "", text)
+
     match = re.search(r"\{.*\}", text, flags=re.DOTALL)
     if not match:
         return None
+
+    blob = match.group(0).strip()
     try:
-        return json.loads(match.group(0))
+        return json.loads(blob)
     except Exception:
         return None
 
 
-def _stub_intent(user_message: str) -> IntentOutput:
-    msg = (user_message or "").lower()
+def _normalize_msg(user_message: str) -> str:
+    m = (user_message or "").lower()
+    m = m.replace("didn’t", "didn't")
+    m = re.sub(r"\s+", " ", m).strip()
+    return m
 
-    if "delivered" in msg and ("not" in msg or "didn't" in msg or "did not" in msg or "didnt" in msg):
+
+def _stub_intent(user_message: str) -> IntentOutput:
+    msg = _normalize_msg(user_message)
+
+    # delivered_not_received
+    delivered_phrases = ["delivered", "left at door", "front door", "porch"]
+    not_received_phrases = [
+        "not received",
+        "still not received",
+        "did not receive", "didn't receive", "didnt receive",
+        "did not get", "didn't get", "didnt get",
+        "never received",
+        "missing",
+        "not here",
+        "not delivered to me",
+    ]
+
+    delivered_like = any(p in msg for p in delivered_phrases)
+    not_received_like = any(p in msg for p in not_received_phrases)
+
+    # ✅ covers both: "Delivered but didn't get it" AND "Still not received"
+    if (delivered_like and not_received_like) or not_received_like:
         intent = "delivered_not_received"
-    elif "attempt" in msg or "attempted" in msg:
+
+    # delivery_attempted (includes "tried to deliver", "no one home")
+    elif any(
+        p in msg
+        for p in [
+            "attempt",
+            "attempted",
+            "tried to deliver",
+            "delivery attempt",
+            "no one was home",
+            "nobody was home",
+        ]
+    ):
         intent = "delivery_attempted"
-    elif "damag" in msg or "broken" in msg:
+
+    # damaged
+    elif any(p in msg for p in ["damag", "broken", "cracked", "smash", "torn"]):
         intent = "damaged"
-    elif "return to sender" in msg or "returned" in msg or "rts" in msg:
+
+    # return to sender
+    elif any(p in msg for p in ["return to sender", "returned", "rts", "sent back"]):
         intent = "return_to_sender"
-    elif "delay" in msg:
+
+    # delayed (include "late")
+    elif any(p in msg for p in ["delay", "delayed", "late", "taking too long"]):
         intent = "delayed"
-    elif "stuck" in msg or "not moving" in msg:
+
+    # stuck_in_transit (include "no movement")
+    elif any(
+        p in msg
+        for p in [
+            "stuck",
+            "not moving",
+            "no movement",
+            "hasn't moved",
+            "hasnt moved",
+            "no update",
+            "not updated",
+        ]
+    ):
         intent = "stuck_in_transit"
+
     else:
         intent = "track_order"
 
+    # Extract order id like A1004
     order_id = None
     m = re.search(r"\bA\d{3,6}\b", user_message or "")
     if m:
         order_id = m.group(0)
 
+    # Extract email
     email = None
     m2 = re.search(r"[\w\.-]+@[\w\.-]+\.\w+", user_message or "")
     if m2:
@@ -142,9 +209,6 @@ def infer_intent(user_message: str) -> IntentOutput:
 # Handoff note generation
 # ---------------------------
 def _stub_handoff(vars: Dict[str, Any]) -> str:
-    """
-    Safe, deterministic fallback.
-    """
     return (
         f"Order: {vars.get('order_id')} | Email: {vars.get('email')}\n"
         f"Status: {vars.get('status')}\n"
@@ -156,10 +220,6 @@ def _stub_handoff(vars: Dict[str, Any]) -> str:
 
 
 def _ollama_generate_text(prompt: str) -> str:
-    """
-    Generate plain text from Ollama.
-    Uses subprocess to avoid new dependencies.
-    """
     model = os.getenv("OLLAMA_MODEL", "llama3.1:8b")
 
     proc = subprocess.run(
@@ -170,9 +230,7 @@ def _ollama_generate_text(prompt: str) -> str:
         check=False,
     )
 
-    out = proc.stdout.decode("utf-8", errors="ignore").strip()
-    # For handoff we want plain text, so just return output.
-    return out
+    return proc.stdout.decode("utf-8", errors="ignore").strip()
 
 
 def generate_handoff(vars: Dict[str, Any]) -> str:
@@ -182,7 +240,6 @@ def generate_handoff(vars: Dict[str, Any]) -> str:
     """
     mode = os.getenv("LLM_MODE", "stub").lower().strip()
 
-    # If prompt file doesn't exist yet, fallback safely
     if not HANDOFF_PROMPT_PATH.exists():
         return _stub_handoff(vars)
 
@@ -194,7 +251,6 @@ def generate_handoff(vars: Dict[str, Any]) -> str:
 
     try:
         text = _ollama_generate_text(prompt).strip()
-        # keep it compact for demo safety
         lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
         return "\n".join(lines[:8]) if lines else _stub_handoff(vars)
     except Exception:
