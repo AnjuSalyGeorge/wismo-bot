@@ -1,4 +1,7 @@
 from fastapi import FastAPI, Depends, Request, HTTPException
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
 from app.models import ChatRequest
 from app.graph import build_graph
 from app.security import require_api_key
@@ -6,6 +9,9 @@ from tools.rate_limit import check_rate_limit
 from tools.logs import log_action
 
 app = FastAPI(title="WISMO Bot")
+
+# Templates (Day 10 UI)
+templates = Jinja2Templates(directory="app/templates")
 
 graph = build_graph()
 
@@ -35,6 +41,12 @@ def _extract_llm_fields(actions: list[dict]) -> dict:
 
 # ---- Day 8 Guardrails ----
 MAX_MESSAGE_CHARS = 2000  # reject huge payloads (basic abuse guard)
+
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    # Simple UI page
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.post("/chat")
@@ -70,7 +82,7 @@ def chat(
         )
         raise HTTPException(
             status_code=413,
-            detail=f"Message too long. Max allowed is {MAX_MESSAGE_CHARS} characters.",
+            detail={"error": "payload_too_large", "message": f"Message too long. Max is {MAX_MESSAGE_CHARS} chars."},
         )
 
     # 2) Rate limit guard
@@ -90,7 +102,7 @@ def chat(
         )
         raise HTTPException(
             status_code=429,
-            detail="Too many requests. Please wait a minute and try again.",
+            detail={"error": "rate_limited", "message": "Too many requests. Please wait a minute and try again."},
         )
 
     # Run the graph

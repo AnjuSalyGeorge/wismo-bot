@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WISMO Bot Demo</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; background:#0b0f17; color:#e8eefc; }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 20px; }
+    .card { background:#121a2a; border:1px solid #22304f; border-radius:14px; padding:16px; }
+    h1 { font-size: 18px; margin: 0 0 12px; }
+    .row { display:flex; gap:12px; flex-wrap: wrap; align-items: center; }
+    .row > * { flex: 1; }
+    label { font-size: 12px; color:#a9b7d9; display:block; margin-bottom:6px; }
+    input, textarea, button { width:100%; box-sizing:border-box; border-radius:12px; border:1px solid #2a3a60; background:#0e1526; color:#e8eefc; padding:10px 12px; }
+    textarea { min-height: 80px; resize: vertical; }
+    button { cursor:pointer; background:#3a6ff7; border:1px solid #3a6ff7; font-weight: 600; }
+    button:disabled { opacity:0.6; cursor:not-allowed; }
+    .chat { margin-top: 14px; display:flex; flex-direction: column; gap: 10px; }
+    .msg { padding:10px 12px; border-radius: 12px; border:1px solid #22304f; background:#0e1526; white-space: pre-wrap; }
+    .me { border-color:#3a6ff7; background:#0c1734; }
+    .bot { border-color:#2a3a60; }
+    .meta { font-size: 12px; color:#a9b7d9; margin-top: 10px; }
+    .pill { display:inline-block; padding:2px 8px; border-radius: 999px; border:1px solid #2a3a60; margin-right:6px; }
+    .small { font-size: 12px; color:#a9b7d9; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>WISMO Bot Demo</h1>
+      <div class="row">
+        <div>
+          <label>Session ID</label>
+          <input id="sessionId" placeholder="e.g. demo1" value="demo1" />
+        </div>
+        <div>
+          <label>API Key (X-API-Key)</label>
+          <input id="apiKey" placeholder="set API_KEY in env and paste here" />
+        </div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <label>Your message</label>
+        <textarea id="message" placeholder="Type something like: Delivered but not received"></textarea>
+      </div>
+
+      <div class="row" style="margin-top:12px;">
+        <div style="flex:0.7;">
+          <button id="sendBtn">Send</button>
+        </div>
+        <div class="small" style="flex:1.3;">
+          Tip: Try multi-turn: “Delivered but not received” → then “Order A1004, anju@example.com”
+        </div>
+      </div>
+
+      <div id="chat" class="chat"></div>
+
+      <div id="lastMeta" class="meta"></div>
+    </div>
+  </div>
+
+  <script>
+    const chatEl = document.getElementById("chat");
+    const metaEl = document.getElementById("lastMeta");
+    const sendBtn = document.getElementById("sendBtn");
+
+    function addMessage(text, who) {
+      const div = document.createElement("div");
+      div.className = "msg " + (who === "me" ? "me" : "bot");
+      div.textContent = text;
+      chatEl.appendChild(div);
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    function renderMeta(data) {
+      if (!data) { metaEl.innerHTML = ""; return; }
+      const pills = [];
+      if (data.intent) pills.push(`<span class="pill">intent: ${data.intent}</span>`);
+      if (typeof data.llm_confidence !== "undefined") pills.push(`<span class="pill">conf: ${data.llm_confidence}</span>`);
+      if (data.case_id) pills.push(`<span class="pill">case: ${data.case_id}</span>`);
+      metaEl.innerHTML = pills.join(" ") + `<div class="small" style="margin-top:8px;">missing_fields: ${(data.missing_fields || []).join(", ")}</div>`;
+    }
+
+    async function send() {
+      const session_id = document.getElementById("sessionId").value.trim();
+      const apiKey = document.getElementById("apiKey").value.trim();
+      const message = document.getElementById("message").value;
+
+      if (!message.trim()) return;
+
+      addMessage(message, "me");
+      document.getElementById("message").value = "";
+      sendBtn.disabled = true;
+
+      try {
+        const headers = { "Content-Type": "application/json" };
+        if (apiKey) headers["X-API-Key"] = apiKey;
+
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ message, session_id }),
+        });
+
+        const text = await res.text();
+        let data = null;
+        try { data = JSON.parse(text); } catch { data = { reply: text }; }
+
+        if (!res.ok) {
+          addMessage(`ERROR ${res.status}: ${JSON.stringify(data)}`, "bot");
+          renderMeta(null);
+          return;
+        }
+
+        addMessage(data.reply || "(no reply)", "bot");
+        renderMeta(data);
+      } catch (e) {
+        addMessage("ERROR: " + e, "bot");
+        renderMeta(null);
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    sendBtn.addEventListener("click", send);
+    document.getElementById("message").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) send();
+    });
+  </script>
+</body>
+</html>
