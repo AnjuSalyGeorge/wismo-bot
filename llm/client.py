@@ -7,47 +7,31 @@ from typing import Optional, Dict, Any
 
 from llm.schemas import IntentOutput
 
-# Prompt files
 INTENT_PROMPT_PATH = Path("prompts/intent_v1.md")
 HANDOFF_PROMPT_PATH = Path("prompts/handoff_v1.md")
 
 
-# ---------------------------
-# Generic prompt helpers
-# ---------------------------
 def load_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
 def render_template(template: str, vars: Dict[str, Any]) -> str:
-    """
-    Simple template renderer for {var} placeholders.
-    (Used for handoff prompt.)
-    """
     out = template
     for k, v in vars.items():
         out = out.replace("{" + k + "}", "" if v is None else str(v))
     return out
 
 
-# ---------------------------
-# Intent prompt (strict JSON)
-# ---------------------------
 def _load_intent_prompt() -> str:
     return load_text(INTENT_PROMPT_PATH)
 
 
 def _render_intent_prompt(user_message: str) -> str:
     template = _load_intent_prompt()
-    # Your intent prompt uses {{user_message}}
     return template.replace("{{user_message}}", user_message)
 
 
 def _extract_json(text: str) -> Optional[dict]:
-    """
-    Extract first JSON object from text.
-    Handles code fences and models that add extra tokens.
-    """
     if not text:
         return None
 
@@ -76,7 +60,6 @@ def _normalize_msg(user_message: str) -> str:
 def _stub_intent(user_message: str) -> IntentOutput:
     msg = _normalize_msg(user_message)
 
-    # delivered_not_received
     delivered_phrases = ["delivered", "left at door", "front door", "porch"]
     not_received_phrases = [
         "not received",
@@ -87,21 +70,19 @@ def _stub_intent(user_message: str) -> IntentOutput:
         "missing",
         "not here",
         "not delivered to me",
+        "product not received",
+        "item not received",
     ]
 
     delivered_like = any(p in msg for p in delivered_phrases)
     not_received_like = any(p in msg for p in not_received_phrases)
 
-    # ✅ covers both: "Delivered but didn't get it" AND "Still not received"
     if (delivered_like and not_received_like) or not_received_like:
         intent = "delivered_not_received"
 
-    # delivery_attempted (includes "tried to deliver", "no one home")
     elif any(
-        p in msg
-        for p in [
-            "attempt",
-            "attempted",
+        p in msg for p in [
+            "attempt", "attempted",
             "tried to deliver",
             "delivery attempt",
             "no one was home",
@@ -110,27 +91,21 @@ def _stub_intent(user_message: str) -> IntentOutput:
     ):
         intent = "delivery_attempted"
 
-    # damaged
     elif any(p in msg for p in ["damag", "broken", "cracked", "smash", "torn"]):
         intent = "damaged"
 
-    # return to sender
     elif any(p in msg for p in ["return to sender", "returned", "rts", "sent back"]):
         intent = "return_to_sender"
 
-    # delayed (include "late")
     elif any(p in msg for p in ["delay", "delayed", "late", "taking too long"]):
         intent = "delayed"
 
-    # stuck_in_transit (include "no movement")
     elif any(
-        p in msg
-        for p in [
+        p in msg for p in [
             "stuck",
             "not moving",
             "no movement",
-            "hasn't moved",
-            "hasnt moved",
+            "hasn't moved", "hasnt moved",
             "no update",
             "not updated",
         ]
@@ -140,13 +115,11 @@ def _stub_intent(user_message: str) -> IntentOutput:
     else:
         intent = "track_order"
 
-    # Extract order id like A1004
     order_id = None
     m = re.search(r"\bA\d{3,6}\b", user_message or "")
     if m:
         order_id = m.group(0)
 
-    # Extract email
     email = None
     m2 = re.search(r"[\w\.-]+@[\w\.-]+\.\w+", user_message or "")
     if m2:
@@ -194,20 +167,12 @@ def _ollama_intent(user_message: str) -> IntentOutput:
 
 
 def infer_intent(user_message: str) -> IntentOutput:
-    """
-    LLM_MODE:
-      - local: call Ollama (strict JSON)
-      - stub: regex fallback
-    """
     mode = os.getenv("LLM_MODE", "stub").lower().strip()
     if mode == "local":
         return _ollama_intent(user_message)
     return _stub_intent(user_message)
 
 
-# ---------------------------
-# Handoff note generation
-# ---------------------------
 def _stub_handoff(vars: Dict[str, Any]) -> str:
     return (
         f"Order: {vars.get('order_id')} | Email: {vars.get('email')}\n"
@@ -221,7 +186,6 @@ def _stub_handoff(vars: Dict[str, Any]) -> str:
 
 def _ollama_generate_text(prompt: str) -> str:
     model = os.getenv("OLLAMA_MODEL", "llama3.1:8b")
-
     proc = subprocess.run(
         ["ollama", "run", model],
         input=prompt.encode("utf-8"),
@@ -229,15 +193,10 @@ def _ollama_generate_text(prompt: str) -> str:
         stderr=subprocess.PIPE,
         check=False,
     )
-
     return proc.stdout.decode("utf-8", errors="ignore").strip()
 
 
 def generate_handoff(vars: Dict[str, Any]) -> str:
-    """
-    Generates INTERNAL HANDOFF NOTE (<=8 lines) for human agents.
-    Uses local LLM if available; otherwise stub.
-    """
     mode = os.getenv("LLM_MODE", "stub").lower().strip()
 
     if not HANDOFF_PROMPT_PATH.exists():

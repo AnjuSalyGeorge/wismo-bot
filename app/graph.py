@@ -25,6 +25,16 @@ from app.models import Order, Shipment
 REPEAT_CLAIM_LABELS = {"delivered_not_received"}
 REPEAT_CLAIM_THRESHOLD = 2  # 3rd+ within 60 days triggers escalation
 
+# Intents that are "complaints" (not pure lookup)
+COMPLAINT_INTENTS = {
+    "delivered_not_received",
+    "delivery_attempted",
+    "damaged",
+    "return_to_sender",
+    "delayed",
+    "stuck_in_transit",
+}
+
 
 class GraphState(TypedDict, total=False):
     message: str
@@ -48,14 +58,14 @@ class GraphState(TypedDict, total=False):
 COMPLAINT_KEYWORDS = [
     "not received", "did not receive", "didn't receive", "didnt receive",
     "delivered but", "still not received",
-    "stuck", "not moving", "delayed", "delay",
-    "attempt", "attempted",
-    "damag", "broken",
+    "stuck", "not moving", "delayed", "delay", "late",
+    "attempt", "attempted", "tried to deliver", "no one was home",
+    "damag", "broken", "cracked",
     "return", "returned", "rts",
     "lost", "missing",
 ]
 
-FOLLOWUP_HINTS = ["still", "same", "again", "no update", "not yet", "any update", "didn't get"]
+FOLLOWUP_HINTS = ["still", "same", "again", "no update", "not yet", "any update", "didn't get", "didnt get"]
 
 
 def _has_complaint_keywords(msg: str) -> bool:
@@ -70,37 +80,40 @@ def _is_details_only_message(msg: str, out) -> bool:
     """
     m = (msg or "").strip().lower()
 
-    # If user explicitly complains, it's not details-only
+    # If user explicitly complains, it's NOT details-only
     if _has_complaint_keywords(m):
         return False
 
     has_emailish = ("@" in m and "." in m)
     has_orderish = ("order" in m) or any(ch.isdigit() for ch in m)
 
-    # Many models label details as track_order with extracted fields
     looks_like_details = (out.intent == "track_order") and (out.extracted_order_id or out.extracted_email)
     return bool(looks_like_details and (has_orderish or has_emailish))
 
 
+def _is_followupish_message(msg: str, out) -> bool:
+    """
+    Follow-up style message like:
+    'still not received', 'any update?', etc.
+    """
+    m = (msg or "").strip().lower()
+    if not m:
+        return False
+    return bool(any(h in m for h in FOLLOWUP_HINTS) or _has_complaint_keywords(m))
+
+
 def _should_reuse_last_intent(msg: str, sess: Dict[str, Any], out) -> bool:
-    """
-    Reuse last intent when user is doing a short follow-up like:
-    - "still not received"
-    - "any update?"
-    and the session already has an ongoing context.
-    """
     if not sess.get("last_intent"):
         return False
 
-    m = (msg or "").strip().lower()
-
-    # Details-only should keep last intent (common follow-up case)
+    # Details-only should keep last intent
     if _is_details_only_message(msg, out):
         return True
 
-    followupish = any(h in m for h in FOLLOWUP_HINTS) or _has_complaint_keywords(m)
-    no_new_entities = (not out.extracted_order_id) and (not out.extracted_email) and ("@" not in m)
-    shortish = len(m) <= 80
+    # Follow-up style and no new entities
+    followupish = _is_followupish_message(msg, out)
+    no_new_entities = (not out.extracted_order_id) and (not out.extracted_email) and ("@" not in (msg or ""))
+    shortish = len((msg or "").strip()) <= 120
 
     return bool(followupish and no_new_entities and shortish)
 
@@ -115,7 +128,26 @@ def _looks_like_pure_lookup(msg: str) -> bool:
         return False
     has_email = ("@" in m and "." in m)
     has_order = ("order" in m) or any(ch.isdigit() for ch in m)
-    return bool(has_email and has_order and len(m) < 120 and not _has_complaint_keywords(m))
+    return bool(has_email and has_order and len(m) < 140 and not _has_complaint_keywords(m))
+
+
+def _should_update_last_complaint(msg: str, out) -> bool:
+    """
+    IMPORTANT FIX:
+    Do NOT overwrite last_complaint with generic messages like
+    'where is my package' or 'hello'.
+    Only treat a message as complaint if:
+    - it has complaint keywords OR
+    - the model intent is a complaint intent (not track_order)
+    """
+    m = (msg or "").strip()
+    if not m:
+        return False
+    if _has_complaint_keywords(m):
+        return True
+    if out.intent in COMPLAINT_INTENTS:
+        return True
+    return False
 
 
 def intake_node(state: GraphState) -> GraphState:
@@ -166,19 +198,18 @@ def understand_node(state: GraphState) -> GraphState:
     if not state.get("email") and sess.get("email"):
         state["email"] = sess["email"]
 
-    # ✅ Compute missing fields AFTER filling
+    # Compute missing fields AFTER filling
     still_missing: List[str] = []
     if not state.get("order_id"):
         still_missing.append("order_id")
     if not state.get("email"):
         still_missing.append("email")
 
-    # Build payload (store full info for debugging)
     payload = {
         "intent": intent,
         "extracted_order_id": out.extracted_order_id,
         "extracted_email": out.extracted_email,
-        "missing_fields": still_missing,  # ✅ final truth
+        "missing_fields": still_missing,
         "risk_flags": out.risk_flags,
         "confidence": out.confidence,
         "suggested_next_action": "ask_followup" if still_missing else "proceed",
@@ -187,12 +218,10 @@ def understand_node(state: GraphState) -> GraphState:
     state["llm_intent"] = payload
     log_action(sid, "llm_intent", payload)
 
-    # ✅ Log minimal for API output (also use final missing_fields)
     state["actions"].append(
         {"llm_intent": {"intent": intent, "missing_fields": still_missing, "confidence": out.confidence}}
     )
 
-    # Persist known values + intent
     patch: Dict[str, Any] = {
         "order_id": state.get("order_id"),
         "email": state.get("email"),
@@ -200,8 +229,8 @@ def understand_node(state: GraphState) -> GraphState:
         "missing_fields": still_missing,
     }
 
-    # Only update last_complaint if NOT details-only
-    if not _is_details_only_message(msg, out):
+    # ✅ FIX: Only update last_complaint for real complaint messages
+    if _should_update_last_complaint(msg, out):
         patch["last_complaint"] = msg
 
     try:
@@ -247,7 +276,6 @@ def retrieve_node(state: GraphState) -> GraphState:
         state["order"] = order.model_dump()
         state["shipment"] = shipment.model_dump()
 
-        # Save confirmed order/email into session
         try:
             update_session(sid, {"order_id": order.order_id, "email": order.email})
         except Exception as e:
@@ -283,13 +311,31 @@ def retrieve_node(state: GraphState) -> GraphState:
         return state
 
 
-def _get_effective_message(state: GraphState) -> str:
+def _get_effective_message(state: GraphState, out_intent: str) -> str:
+    """
+    IMPORTANT FIX:
+    Only reuse last_complaint when the user is:
+      - providing missing details (order/email), OR
+      - clearly asking follow-up like "still", "any update", etc.
+    DO NOT reuse last_complaint just because the message is short.
+    """
     sess = state.get("session") or {}
-    raw_message = state.get("message", "") or ""
-    if sess.get("last_complaint"):
-        # If this looks like a details-only message, reuse last complaint for diagnosis/policy
-        if len(raw_message.strip()) < 80 or ("@" in raw_message) or ("order" in raw_message.lower()):
-            return sess["last_complaint"]
+    raw_message = (state.get("message", "") or "").strip()
+    if not raw_message:
+        return sess.get("last_complaint") or ""
+
+    if not sess.get("last_complaint"):
+        return raw_message
+
+    m = raw_message.lower()
+    has_details = ("@" in m) or ("order" in m) or any(ch.isdigit() for ch in m)
+    followupish = any(h in m for h in FOLLOWUP_HINTS)
+
+    # If user is continuing same issue via details/follow-up, use last complaint.
+    if has_details or followupish:
+        return sess["last_complaint"]
+
+    # Otherwise, use the new message.
     return raw_message
 
 
@@ -314,8 +360,7 @@ def decide_node(state: GraphState) -> GraphState:
     raw_message = state.get("message", "") or ""
     intent = (state.get("llm_intent") or {}).get("intent") or "track_order"
 
-    # ✅ NEW: Pure lookup should NOT trigger policy/diagnosis/escalation.
-    # This fixes eval t12/t16/t18 where users only provide order+email.
+    # Pure lookup in a fresh session: just status
     if intent == "track_order" and not sess.get("last_complaint") and _looks_like_pure_lookup(raw_message):
         state["actions"].append({"decision": "status_update"})
         state["reply"] = (
@@ -328,7 +373,7 @@ def decide_node(state: GraphState) -> GraphState:
             pass
         return state
 
-    effective_message = _get_effective_message(state)
+    effective_message = _get_effective_message(state, intent)
 
     diag = diagnose(effective_message, shipment)
     log_action(sid, "diagnosis", {"label": diag.label, "confidence": diag.confidence, "notes": diag.notes})
@@ -401,9 +446,7 @@ def decide_node(state: GraphState) -> GraphState:
             pass
         return state
 
-    # -------------------------
     # Case creation + reuse
-    # -------------------------
     if action in {"open_investigation", "escalate"}:
         existing_case_id = None
         try:
@@ -490,7 +533,10 @@ def decide_node(state: GraphState) -> GraphState:
         return state
 
     if action == "reassure_and_monitor":
-        state["reply"] = "Your shipment is in transit. If it doesn’t move for 48 hours, I can open a carrier investigation."
+        state["reply"] = (
+            f"Your shipment is currently **{shipment.current_status}**. "
+            "If it doesn’t move for 48 hours, I can open a carrier investigation."
+        )
         try:
             append_message(sid, "assistant", state["reply"])
         except Exception:
