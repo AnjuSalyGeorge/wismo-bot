@@ -1,60 +1,60 @@
-{"id":"t01","session_id":"eval_t01","message":"Delivered but not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
-{"id":"t02","session_id":"eval_t02","message":"It says delivered but I did not receive it","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
-{"id":"t03","session_id":"eval_t03","message":"Order A1004 delivered but not received. Email anju@example.com","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true,"expected_case_reason":"escalate"}
-{"id":"t04","session_id":"eval_t04","message":"Delivery was attempted today, what should I do?","expected_intent":"delivery_attempted","expected_followup":true,"expected_case_created":false}
-{"id":"t05","session_id":"eval_t05","message":"My package arrived damaged","expected_intent":"damaged","expected_followup":true,"expected_case_created":false}
-{"id":"t06","session_id":"eval_t06","message":"My order is stuck and not moving for 5 days","expected_intent":"stuck_in_transit","expected_followup":true,"expected_case_created":false}
-{"id":"t07","session_id":"eval_t07","message":"Tracking shows returned to sender","expected_intent":"return_to_sender","expected_followup":true,"expected_case_created":false}
-{"id":"t08","session_id":"eval_t08","message":"Where is my order?","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
-{"id":"t09","session_id":"eval_t09","message":"Order A1002 email test@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
-{"id":"t10","session_id":"eval_t10","message":"Order A1003 email test@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
-{"id":"t11","session_id":"eval_t11","message":"Order A1001 email test@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
-{"id":"t12","session_id":"eval_t12","message":"Order A1004, anju@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
-{"id":"t13","session_id":"eval_t13","message":"Delivered but not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
-{"id":"t14","session_id":"eval_t13","message":"Order A1004, anju@example.com","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true,"expected_case_reason":"escalate"}
-{"id":"t15","session_id":"eval_t13","message":"Still not received","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true,"expected_reuse_case":true}
-{"id":"t16","session_id":"eval_t16","message":"A1004 anju@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
-{"id":"t17","session_id":"eval_t17","message":"Order A1004 delivered but not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
-{"id":"t18","session_id":"eval_t18","message":"Email anju@example.com order A1004","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
-{"id":"t19","session_id":"eval_t19","message":"I want to cancel my subscription","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
-{"id":"t20","session_id":"eval_t20","message":"x","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
-{"id":"t21","session_id":"eval_t21","message":"Delivery attempted","expected_intent":"delivery_attempted","expected_followup":true,"expected_case_created":false}
-{"id":"t22","session_id":"eval_t22","message":"Tried to deliver but no one was home","expected_intent":"delivery_attempted","expected_followup":true,"expected_case_created":false}
-{"id":"t23","session_id":"eval_t23","message":"Courier attempted delivery. Need redelivery","expected_intent":"delivery_attempted","expected_followup":true,"expected_case_created":false}
+{"id":"t01","suite":"core","session_id":"eval_t01","message":"Delivered but not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
+{"id":"t02","suite":"core","session_id":"eval_t02","message":"It says delivered but I did not receive it","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
+{"id":"t03","suite":"core","session_id":"eval_t03","message":"Order A1004 delivered but not received. Email anju@example.com","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true,"expected_case_reason":"escalate"}
+{"id":"t04","suite":"core","session_id":"eval_t04","message":"Delivery was attempted today, what should I do?","expected_intent":"delivery_attempted","expected_followup":true,"expected_case_created":false}
+{"id":"t05","suite":"core","session_id":"eval_t05","message":"My package arrived damaged","expected_intent":"damaged","expected_followup":true,"expected_case_created":false}
+{"id":"t06","suite":"core","session_id":"eval_t06","message":"My order is stuck and not moving for 5 days","expected_intent":"stuck_in_transit","expected_followup":true,"expected_case_created":false}
+{"id":"t07","suite":"core","session_id":"eval_t07","message":"Tracking shows returned to sender","expected_intent":"return_to_sender","expected_followup":true,"expected_case_created":false}
+{"id":"t08","suite":"core","session_id":"eval_t08","message":"Where is my order?","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
+{"id":"t09","suite":"core","session_id":"eval_t09","message":"Order A1002 email test@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t10","suite":"core","session_id":"eval_t10","message":"Order A1003 email test@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t11","suite":"core","session_id":"eval_t11","message":"Order A1001 email test@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t12","suite":"core","session_id":"eval_t12","message":"Order A1004, anju@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t13","suite":"core","session_id":"eval_t13","message":"Delivered but not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
+{"id":"t14","suite":"core","session_id":"eval_t13","message":"Order A1004, anju@example.com","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true,"expected_case_reason":"escalate"}
+{"id":"t15","suite":"core","session_id":"eval_t13","message":"Still not received","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true,"expected_reuse_case":true}
+{"id":"t16","suite":"core","session_id":"eval_t16","message":"A1004 anju@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t17","suite":"core","session_id":"eval_t17","message":"Order A1004 delivered but not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
+{"id":"t18","suite":"core","session_id":"eval_t18","message":"Email anju@example.com order A1004","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t19","suite":"core","session_id":"eval_t19","message":"I want to cancel my subscription","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
+{"id":"t20","suite":"core","session_id":"eval_t20","message":"x","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
+{"id":"t21","suite":"core","session_id":"eval_t21","message":"Delivery attempted","expected_intent":"delivery_attempted","expected_followup":true,"expected_case_created":false}
+{"id":"t22","suite":"core","session_id":"eval_t22","message":"Tried to deliver but no one was home","expected_intent":"delivery_attempted","expected_followup":true,"expected_case_created":false}
+{"id":"t23","suite":"core","session_id":"eval_t23","message":"Courier attempted delivery. Need redelivery","expected_intent":"delivery_attempted","expected_followup":true,"expected_case_created":false}
 
-{"id":"t24","session_id":"eval_t24","message":"Package damaged","expected_intent":"damaged","expected_followup":true,"expected_case_created":false}
-{"id":"t25","session_id":"eval_t25","message":"Box is broken and item is damaged","expected_intent":"damaged","expected_followup":true,"expected_case_created":false}
-{"id":"t26","session_id":"eval_t26","message":"My order arrived broken","expected_intent":"damaged","expected_followup":true,"expected_case_created":false}
+{"id":"t24","suite":"core","session_id":"eval_t24","message":"Package damaged","expected_intent":"damaged","expected_followup":true,"expected_case_created":false}
+{"id":"t25","suite":"core","session_id":"eval_t25","message":"Box is broken and item is damaged","expected_intent":"damaged","expected_followup":true,"expected_case_created":false}
+{"id":"t26","suite":"core","session_id":"eval_t26","message":"My order arrived broken","expected_intent":"damaged","expected_followup":true,"expected_case_created":false}
 
-{"id":"t27","session_id":"eval_t27","message":"Returned to sender","expected_intent":"return_to_sender","expected_followup":true,"expected_case_created":false}
-{"id":"t28","session_id":"eval_t28","message":"It got RTS by the courier","expected_intent":"return_to_sender","expected_followup":true,"expected_case_created":false}
-{"id":"t29","session_id":"eval_t29","message":"My package was returned. Need resend","expected_intent":"return_to_sender","expected_followup":true,"expected_case_created":false}
+{"id":"t27","suite":"core","session_id":"eval_t27","message":"Returned to sender","expected_intent":"return_to_sender","expected_followup":true,"expected_case_created":false}
+{"id":"t28","suite":"core","session_id":"eval_t28","message":"It got RTS by the courier","expected_intent":"return_to_sender","expected_followup":true,"expected_case_created":false}
+{"id":"t29","suite":"core","session_id":"eval_t29","message":"My package was returned. Need resend","expected_intent":"return_to_sender","expected_followup":true,"expected_case_created":false}
 
-{"id":"t30","session_id":"eval_t30","message":"My shipment is delayed","expected_intent":"delayed","expected_followup":true,"expected_case_created":false}
-{"id":"t31","session_id":"eval_t31","message":"Why is my delivery late?","expected_intent":"delayed","expected_followup":true,"expected_case_created":false}
-{"id":"t32","session_id":"eval_t32","message":"It’s not coming on time, delayed","expected_intent":"delayed","expected_followup":true,"expected_case_created":false}
+{"id":"t30","suite":"core","session_id":"eval_t30","message":"My shipment is delayed","expected_intent":"delayed","expected_followup":true,"expected_case_created":false}
+{"id":"t31","suite":"core","session_id":"eval_t31","message":"Why is my delivery late?","expected_intent":"delayed","expected_followup":true,"expected_case_created":false}
+{"id":"t32","suite":"core","session_id":"eval_t32","message":"It’s not coming on time, delayed","expected_intent":"delayed","expected_followup":true,"expected_case_created":false}
 
-{"id":"t33","session_id":"eval_t33","message":"Tracking not moving for 3 days","expected_intent":"stuck_in_transit","expected_followup":true,"expected_case_created":false}
-{"id":"t34","session_id":"eval_t34","message":"Package stuck in transit","expected_intent":"stuck_in_transit","expected_followup":true,"expected_case_created":false}
-{"id":"t35","session_id":"eval_t35","message":"Shipment has no movement","expected_intent":"stuck_in_transit","expected_followup":true,"expected_case_created":false}
+{"id":"t33","suite":"core","session_id":"eval_t33","message":"Tracking not moving for 3 days","expected_intent":"stuck_in_transit","expected_followup":true,"expected_case_created":false}
+{"id":"t34","suite":"core","session_id":"eval_t34","message":"Package stuck in transit","expected_intent":"stuck_in_transit","expected_followup":true,"expected_case_created":false}
+{"id":"t35","suite":"core","session_id":"eval_t35","message":"Shipment has no movement","expected_intent":"stuck_in_transit","expected_followup":true,"expected_case_created":false}
 
-{"id":"t36","session_id":"eval_t36","message":"Order A1004, anju@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
-{"id":"t37","session_id":"eval_t37","message":"A1004 anju@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
-{"id":"t38","session_id":"eval_t38","message":"Email anju@example.com order A1004","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t36","suite":"core","session_id":"eval_t36","message":"Order A1004, anju@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t37","suite":"core","session_id":"eval_t37","message":"A1004 anju@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t38","suite":"core","session_id":"eval_t38","message":"Email anju@example.com order A1004","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
 
-{"id":"t39","session_id":"eval_t39","message":"Delivered but not received. Order A1004 anju@example.com","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true}
-{"id":"t40","session_id":"eval_t40","message":"It says delivered but not received. A1004 / anju@example.com","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true}
-{"id":"t41","session_id":"eval_t41","message":"Delivered but I didn't get it. Order A1004, email anju@example.com","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true}
+{"id":"t39","suite":"core","session_id":"eval_t39","message":"Delivered but not received. Order A1004 anju@example.com","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true}
+{"id":"t40","suite":"core","session_id":"eval_t40","message":"It says delivered but not received. A1004 / anju@example.com","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true}
+{"id":"t41","suite":"core","session_id":"eval_t41","message":"Delivered but I didn't get it. Order A1004, email anju@example.com","expected_intent":"delivered_not_received","expected_followup":false,"expected_case_created":true}
 
-{"id":"t42","session_id":"eval_t42","message":"Delivered but not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
+{"id":"t42","suite":"core","session_id":"eval_t42","message":"Delivered but not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
 
-{"id":"t43","session_id":"eval_t43","message":"Order A1004, anju@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
+{"id":"t43","suite":"core","session_id":"eval_t43","message":"Order A1004, anju@example.com","expected_intent":"track_order","expected_followup":false,"expected_case_created":false}
 
-{"id":"t44","session_id":"eval_t44","message":"Still not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
-{"id":"t45","session_id":"eval_t45","message":"Where is my package?","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
-{"id":"t46","session_id":"eval_t46","message":"Track my order please","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
-{"id":"t47","session_id":"eval_t47","message":"Need tracking update","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
+{"id":"t44","suite":"core","session_id":"eval_t44","message":"Still not received","expected_intent":"delivered_not_received","expected_followup":true,"expected_case_created":false}
+{"id":"t45","suite":"core","session_id":"eval_t45","message":"Where is my package?","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
+{"id":"t46","suite":"core","session_id":"eval_t46","message":"Track my order please","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
+{"id":"t47","suite":"core","session_id":"eval_t47","message":"Need tracking update","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
 
-{"id":"t48","session_id":"eval_t48","message":"A1004","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
-{"id":"t49","session_id":"eval_t49","message":"anju@example.com","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
-{"id":"t50","session_id":"eval_t50","message":"Order is A1004","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
+{"id":"t48","suite":"core","session_id":"eval_t48","message":"A1004","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
+{"id":"t49","suite":"core","session_id":"eval_t49","message":"anju@example.com","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}
+{"id":"t50","suite":"core","session_id":"eval_t50","message":"Order is A1004","expected_intent":"track_order","expected_followup":true,"expected_case_created":false}

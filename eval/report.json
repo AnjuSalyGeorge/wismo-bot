@@ -1,1157 +1,2692 @@
 {
-  "total": 50,
-  "passed": 50,
-  "failed": 0,
-  "pass_rate": 100.0,
-  "failures": [],
-  "results": [
-    {
-      "id": "t01",
-      "session_id": "eval_t01__run_1770612630",
-      "message": "Delivered but not received",
-      "expected": {
-        "expected_intent": "delivered_not_received",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delivered_not_received",
-        "missing_fields": [
-          "order_id",
-          "email"
+  "run_id": "1770777279",
+  "mode": "local",
+  "overall": {
+    "total": 50,
+    "passed": 50,
+    "failed": 0,
+    "pass_rate": 100.0,
+    "metrics": {
+      "intent": {
+        "labels": [
+          "damaged",
+          "delayed",
+          "delivered_not_received",
+          "delivery_attempted",
+          "return_to_sender",
+          "stuck_in_transit",
+          "track_order"
         ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "per_label": {
+          "damaged": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 4
+          },
+          "delayed": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 3
+          },
+          "delivered_not_received": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 12
+          },
+          "delivery_attempted": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 4
+          },
+          "return_to_sender": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 4
+          },
+          "stuck_in_transit": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 4
+          },
+          "track_order": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 19
+          }
+        },
+        "confusion_matrix": {
+          "damaged": {
+            "damaged": 4,
+            "delayed": 0,
+            "delivered_not_received": 0,
+            "delivery_attempted": 0,
+            "return_to_sender": 0,
+            "stuck_in_transit": 0,
+            "track_order": 0
+          },
+          "delayed": {
+            "damaged": 0,
+            "delayed": 3,
+            "delivered_not_received": 0,
+            "delivery_attempted": 0,
+            "return_to_sender": 0,
+            "stuck_in_transit": 0,
+            "track_order": 0
+          },
+          "delivered_not_received": {
+            "damaged": 0,
+            "delayed": 0,
+            "delivered_not_received": 12,
+            "delivery_attempted": 0,
+            "return_to_sender": 0,
+            "stuck_in_transit": 0,
+            "track_order": 0
+          },
+          "delivery_attempted": {
+            "damaged": 0,
+            "delayed": 0,
+            "delivered_not_received": 0,
+            "delivery_attempted": 4,
+            "return_to_sender": 0,
+            "stuck_in_transit": 0,
+            "track_order": 0
+          },
+          "return_to_sender": {
+            "damaged": 0,
+            "delayed": 0,
+            "delivered_not_received": 0,
+            "delivery_attempted": 0,
+            "return_to_sender": 4,
+            "stuck_in_transit": 0,
+            "track_order": 0
+          },
+          "stuck_in_transit": {
+            "damaged": 0,
+            "delayed": 0,
+            "delivered_not_received": 0,
+            "delivery_attempted": 0,
+            "return_to_sender": 0,
+            "stuck_in_transit": 4,
+            "track_order": 0
+          },
+          "track_order": {
+            "damaged": 0,
+            "delayed": 0,
+            "delivered_not_received": 0,
+            "delivery_attempted": 0,
+            "return_to_sender": 0,
+            "stuck_in_transit": 0,
+            "track_order": 19
+          }
+        }
       },
-      "pass": true
+      "followup_accuracy": 1.0,
+      "case_created_accuracy": 1.0,
+      "reuse_case_accuracy": 1.0,
+      "task_success_rate": 100.0
     },
-    {
-      "id": "t02",
-      "session_id": "eval_t02__run_1770612630",
-      "message": "It says delivered but I did not receive it",
-      "expected": {
-        "expected_intent": "delivered_not_received",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delivered_not_received",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t03",
-      "session_id": "eval_t03__run_1770612630",
-      "message": "Order A1004 delivered but not received. Email anju@example.com",
-      "expected": {
-        "expected_intent": "delivered_not_received",
-        "expected_followup": false,
-        "expected_case_created": true
-      },
-      "got": {
-        "reply": "I\u2019m escalating this to a human support agent. I created a case (CASE-ACE758E3). A support agent will follow up.",
-        "intent": "delivered_not_received",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "escalate",
-        "tool": "create_case",
-        "case_id": "CASE-ACE758E3",
-        "case_event": "create"
-      },
-      "pass": true
-    },
-    {
-      "id": "t04",
-      "session_id": "eval_t04__run_1770612630",
-      "message": "Delivery was attempted today, what should I do?",
-      "expected": {
-        "expected_intent": "delivery_attempted",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delivery_attempted",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t05",
-      "session_id": "eval_t05__run_1770612630",
-      "message": "My package arrived damaged",
-      "expected": {
-        "expected_intent": "damaged",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "damaged",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t06",
-      "session_id": "eval_t06__run_1770612630",
-      "message": "My order is stuck and not moving for 5 days",
-      "expected": {
-        "expected_intent": "stuck_in_transit",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "stuck_in_transit",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t07",
-      "session_id": "eval_t07__run_1770612630",
-      "message": "Tracking shows returned to sender",
-      "expected": {
-        "expected_intent": "return_to_sender",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "return_to_sender",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t08",
-      "session_id": "eval_t08__run_1770612630",
-      "message": "Where is my order?",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "track_order",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t09",
-      "session_id": "eval_t09__run_1770612630",
-      "message": "Order A1002 email test@example.com",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": false,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "That email doesn\u2019t match the order on file. Please double-check and try again.",
-        "intent": "track_order",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t10",
-      "session_id": "eval_t10__run_1770612630",
-      "message": "Order A1003 email test@example.com",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": false,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "That email doesn\u2019t match the order on file. Please double-check and try again.",
-        "intent": "track_order",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t11",
-      "session_id": "eval_t11__run_1770612630",
-      "message": "Order A1001 email test@example.com",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": false,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "That email doesn\u2019t match the order on file. Please double-check and try again.",
-        "intent": "track_order",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t12",
-      "session_id": "eval_t12__run_1770612630",
-      "message": "Order A1004, anju@example.com",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": false,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
-        "intent": "track_order",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "status_update",
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t13",
-      "session_id": "eval_t13__run_1770612630",
-      "message": "Delivered but not received",
-      "expected": {
-        "expected_intent": "delivered_not_received",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delivered_not_received",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t14",
-      "session_id": "eval_t13__run_1770612630",
-      "message": "Order A1004, anju@example.com",
-      "expected": {
-        "expected_intent": "delivered_not_received",
-        "expected_followup": false,
-        "expected_case_created": true
-      },
-      "got": {
-        "reply": "I\u2019m escalating this to a human support agent. I created a case (CASE-577E085E). A support agent will follow up.",
-        "intent": "delivered_not_received",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "escalate",
-        "tool": "create_case",
-        "case_id": "CASE-577E085E",
-        "case_event": "create"
-      },
-      "pass": true
-    },
-    {
-      "id": "t15",
-      "session_id": "eval_t13__run_1770612630",
-      "message": "Still not received",
-      "expected": {
-        "expected_intent": "delivered_not_received",
-        "expected_followup": false,
-        "expected_case_created": true
-      },
-      "got": {
-        "reply": "I\u2019m escalating this to a human support agent. I already have an open case (CASE-577E085E) for this session. A support agent will follow up.",
-        "intent": "delivered_not_received",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "escalate",
-        "tool": "reuse_case",
-        "case_id": "CASE-577E085E",
-        "case_event": "reuse"
-      },
-      "pass": true
-    },
-    {
-      "id": "t16",
-      "session_id": "eval_t16__run_1770612630",
-      "message": "A1004 anju@example.com",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": false,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
-        "intent": "track_order",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "status_update",
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t17",
-      "session_id": "eval_t17__run_1770612630",
-      "message": "Order A1004 delivered but not received",
-      "expected": {
-        "expected_intent": "delivered_not_received",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delivered_not_received",
-        "missing_fields": [
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t18",
-      "session_id": "eval_t18__run_1770612630",
-      "message": "Email anju@example.com order A1004",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": false,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
-        "intent": "track_order",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "status_update",
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t19",
-      "session_id": "eval_t19__run_1770612630",
-      "message": "I want to cancel my subscription",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "track_order",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t20",
-      "session_id": "eval_t20__run_1770612630",
-      "message": "x",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "track_order",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t21",
-      "session_id": "eval_t21__run_1770612630",
-      "message": "Delivery attempted",
-      "expected": {
-        "expected_intent": "delivery_attempted",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delivery_attempted",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t22",
-      "session_id": "eval_t22__run_1770612630",
-      "message": "Tried to deliver but no one was home",
-      "expected": {
-        "expected_intent": "delivery_attempted",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delivery_attempted",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t23",
-      "session_id": "eval_t23__run_1770612630",
-      "message": "Courier attempted delivery. Need redelivery",
-      "expected": {
-        "expected_intent": "delivery_attempted",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delivery_attempted",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t24",
-      "session_id": "eval_t24__run_1770612630",
-      "message": "Package damaged",
-      "expected": {
-        "expected_intent": "damaged",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "damaged",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t25",
-      "session_id": "eval_t25__run_1770612630",
-      "message": "Box is broken and item is damaged",
-      "expected": {
-        "expected_intent": "damaged",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "damaged",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t26",
-      "session_id": "eval_t26__run_1770612630",
-      "message": "My order arrived broken",
-      "expected": {
-        "expected_intent": "damaged",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "damaged",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t27",
-      "session_id": "eval_t27__run_1770612630",
-      "message": "Returned to sender",
-      "expected": {
-        "expected_intent": "return_to_sender",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "return_to_sender",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t28",
-      "session_id": "eval_t28__run_1770612630",
-      "message": "It got RTS by the courier",
-      "expected": {
-        "expected_intent": "return_to_sender",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "return_to_sender",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t29",
-      "session_id": "eval_t29__run_1770612630",
-      "message": "My package was returned. Need resend",
-      "expected": {
-        "expected_intent": "return_to_sender",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "return_to_sender",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t30",
-      "session_id": "eval_t30__run_1770612630",
-      "message": "My shipment is delayed",
-      "expected": {
-        "expected_intent": "delayed",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delayed",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t31",
-      "session_id": "eval_t31__run_1770612630",
-      "message": "Why is my delivery late?",
-      "expected": {
-        "expected_intent": "delayed",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delayed",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t32",
-      "session_id": "eval_t32__run_1770612630",
-      "message": "It\u2019s not coming on time, delayed",
-      "expected": {
-        "expected_intent": "delayed",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delayed",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t33",
-      "session_id": "eval_t33__run_1770612630",
-      "message": "Tracking not moving for 3 days",
-      "expected": {
-        "expected_intent": "stuck_in_transit",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "stuck_in_transit",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t34",
-      "session_id": "eval_t34__run_1770612630",
-      "message": "Package stuck in transit",
-      "expected": {
-        "expected_intent": "stuck_in_transit",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "stuck_in_transit",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t35",
-      "session_id": "eval_t35__run_1770612630",
-      "message": "Shipment has no movement",
-      "expected": {
-        "expected_intent": "stuck_in_transit",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "stuck_in_transit",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t36",
-      "session_id": "eval_t36__run_1770612630",
-      "message": "Order A1004, anju@example.com",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": false,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
-        "intent": "track_order",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "status_update",
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t37",
-      "session_id": "eval_t37__run_1770612630",
-      "message": "A1004 anju@example.com",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": false,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
-        "intent": "track_order",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "status_update",
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t38",
-      "session_id": "eval_t38__run_1770612630",
-      "message": "Email anju@example.com order A1004",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": false,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
-        "intent": "track_order",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "status_update",
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t39",
-      "session_id": "eval_t39__run_1770612630",
-      "message": "Delivered but not received. Order A1004 anju@example.com",
-      "expected": {
-        "expected_intent": "delivered_not_received",
-        "expected_followup": false,
-        "expected_case_created": true
-      },
-      "got": {
-        "reply": "I\u2019m escalating this to a human support agent. I created a case (CASE-64BF913E). A support agent will follow up.",
-        "intent": "delivered_not_received",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "escalate",
-        "tool": "create_case",
-        "case_id": "CASE-64BF913E",
-        "case_event": "create"
-      },
-      "pass": true
-    },
-    {
-      "id": "t40",
-      "session_id": "eval_t40__run_1770612630",
-      "message": "It says delivered but not received. A1004 / anju@example.com",
-      "expected": {
-        "expected_intent": "delivered_not_received",
-        "expected_followup": false,
-        "expected_case_created": true
-      },
-      "got": {
-        "reply": "I\u2019m escalating this to a human support agent. I created a case (CASE-C42C1E69). A support agent will follow up.",
-        "intent": "delivered_not_received",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "escalate",
-        "tool": "create_case",
-        "case_id": "CASE-C42C1E69",
-        "case_event": "create"
-      },
-      "pass": true
-    },
-    {
-      "id": "t41",
-      "session_id": "eval_t41__run_1770612630",
-      "message": "Delivered but I didn't get it. Order A1004, email anju@example.com",
-      "expected": {
-        "expected_intent": "delivered_not_received",
-        "expected_followup": false,
-        "expected_case_created": true
-      },
-      "got": {
-        "reply": "I\u2019m escalating this to a human support agent. I created a case (CASE-F5778F29). A support agent will follow up.",
-        "intent": "delivered_not_received",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "escalate",
-        "tool": "create_case",
-        "case_id": "CASE-F5778F29",
-        "case_event": "create"
-      },
-      "pass": true
-    },
-    {
-      "id": "t42",
-      "session_id": "eval_t42__run_1770612630",
-      "message": "Delivered but not received",
-      "expected": {
-        "expected_intent": "delivered_not_received",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delivered_not_received",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t43",
-      "session_id": "eval_t43__run_1770612630",
-      "message": "Order A1004, anju@example.com",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": false,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
-        "intent": "track_order",
-        "missing_fields": [],
-        "confidence": 0.55,
-        "decision": "status_update",
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t44",
-      "session_id": "eval_t44__run_1770612630",
-      "message": "Still not received",
-      "expected": {
-        "expected_intent": "delivered_not_received",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "delivered_not_received",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t45",
-      "session_id": "eval_t45__run_1770612630",
-      "message": "Where is my package?",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "track_order",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t46",
-      "session_id": "eval_t46__run_1770612630",
-      "message": "Track my order please",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "track_order",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t47",
-      "session_id": "eval_t47__run_1770612630",
-      "message": "Need tracking update",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "track_order",
-        "missing_fields": [
-          "order_id",
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t48",
-      "session_id": "eval_t48__run_1770612630",
-      "message": "A1004",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "track_order",
-        "missing_fields": [
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t49",
-      "session_id": "eval_t49__run_1770612630",
-      "message": "anju@example.com",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "track_order",
-        "missing_fields": [
-          "order_id"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
-    },
-    {
-      "id": "t50",
-      "session_id": "eval_t50__run_1770612630",
-      "message": "Order is A1004",
-      "expected": {
-        "expected_intent": "track_order",
-        "expected_followup": true,
-        "expected_case_created": false
-      },
-      "got": {
-        "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
-        "intent": "track_order",
-        "missing_fields": [
-          "email"
-        ],
-        "confidence": 0.55,
-        "decision": null,
-        "tool": null,
-        "case_id": null,
-        "case_event": "none"
-      },
-      "pass": true
+    "failures": [],
+    "results": [
+      {
+        "id": "t01",
+        "session_id": "eval_t01__run_1770777279",
+        "message": "Delivered but not received",
+        "expected": {
+          "expected_intent": "delivered_not_received",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delivered_not_received",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t02",
+        "session_id": "eval_t02__run_1770777279",
+        "message": "It says delivered but I did not receive it",
+        "expected": {
+          "expected_intent": "delivered_not_received",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delivered_not_received",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t03",
+        "session_id": "eval_t03__run_1770777279",
+        "message": "Order A1004 delivered but not received. Email anju@example.com",
+        "expected": {
+          "expected_intent": "delivered_not_received",
+          "expected_followup": false,
+          "expected_case_created": true,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "I\u2019m escalating this to a human support agent. I created a case (CASE-9C6A7130). A support agent will follow up.",
+          "intent": "delivered_not_received",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "escalate",
+          "tool": "create_case",
+          "case_id": "CASE-9C6A7130",
+          "case_event": "create"
+        },
+        "pass": true
+      },
+      {
+        "id": "t04",
+        "session_id": "eval_t04__run_1770777279",
+        "message": "Delivery was attempted today, what should I do?",
+        "expected": {
+          "expected_intent": "delivery_attempted",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delivery_attempted",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t05",
+        "session_id": "eval_t05__run_1770777279",
+        "message": "My package arrived damaged",
+        "expected": {
+          "expected_intent": "damaged",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "damaged",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t06",
+        "session_id": "eval_t06__run_1770777279",
+        "message": "My order is stuck and not moving for 5 days",
+        "expected": {
+          "expected_intent": "stuck_in_transit",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "stuck_in_transit",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t07",
+        "session_id": "eval_t07__run_1770777279",
+        "message": "Tracking shows returned to sender",
+        "expected": {
+          "expected_intent": "return_to_sender",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "return_to_sender",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t08",
+        "session_id": "eval_t08__run_1770777279",
+        "message": "Where is my order?",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "track_order",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t09",
+        "session_id": "eval_t09__run_1770777279",
+        "message": "Order A1002 email test@example.com",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": false,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "That email doesn\u2019t match the order on file. Please double-check and try again.",
+          "intent": "track_order",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t10",
+        "session_id": "eval_t10__run_1770777279",
+        "message": "Order A1003 email test@example.com",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": false,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "That email doesn\u2019t match the order on file. Please double-check and try again.",
+          "intent": "track_order",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t11",
+        "session_id": "eval_t11__run_1770777279",
+        "message": "Order A1001 email test@example.com",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": false,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "That email doesn\u2019t match the order on file. Please double-check and try again.",
+          "intent": "track_order",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t12",
+        "session_id": "eval_t12__run_1770777279",
+        "message": "Order A1004, anju@example.com",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": false,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+          "intent": "track_order",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "status_update",
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t13",
+        "session_id": "eval_t13__run_1770777279",
+        "message": "Delivered but not received",
+        "expected": {
+          "expected_intent": "delivered_not_received",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delivered_not_received",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t14",
+        "session_id": "eval_t13__run_1770777279",
+        "message": "Order A1004, anju@example.com",
+        "expected": {
+          "expected_intent": "delivered_not_received",
+          "expected_followup": false,
+          "expected_case_created": true,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "I\u2019m escalating this to a human support agent. I created a case (CASE-9916D71A). A support agent will follow up.",
+          "intent": "delivered_not_received",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "escalate",
+          "tool": "create_case",
+          "case_id": "CASE-9916D71A",
+          "case_event": "create"
+        },
+        "pass": true
+      },
+      {
+        "id": "t15",
+        "session_id": "eval_t13__run_1770777279",
+        "message": "Still not received",
+        "expected": {
+          "expected_intent": "delivered_not_received",
+          "expected_followup": false,
+          "expected_case_created": true,
+          "expected_reuse_case": true
+        },
+        "got": {
+          "reply": "I\u2019m escalating this to a human support agent. I already have an open case (CASE-9916D71A) for this session. A support agent will follow up.",
+          "intent": "delivered_not_received",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "escalate",
+          "tool": "reuse_case",
+          "case_id": "CASE-9916D71A",
+          "case_event": "reuse"
+        },
+        "pass": true
+      },
+      {
+        "id": "t16",
+        "session_id": "eval_t16__run_1770777279",
+        "message": "A1004 anju@example.com",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": false,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+          "intent": "track_order",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "status_update",
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t17",
+        "session_id": "eval_t17__run_1770777279",
+        "message": "Order A1004 delivered but not received",
+        "expected": {
+          "expected_intent": "delivered_not_received",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delivered_not_received",
+          "missing_fields": [
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t18",
+        "session_id": "eval_t18__run_1770777279",
+        "message": "Email anju@example.com order A1004",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": false,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+          "intent": "track_order",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "status_update",
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t19",
+        "session_id": "eval_t19__run_1770777279",
+        "message": "I want to cancel my subscription",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "track_order",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t20",
+        "session_id": "eval_t20__run_1770777279",
+        "message": "x",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "track_order",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t21",
+        "session_id": "eval_t21__run_1770777279",
+        "message": "Delivery attempted",
+        "expected": {
+          "expected_intent": "delivery_attempted",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delivery_attempted",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t22",
+        "session_id": "eval_t22__run_1770777279",
+        "message": "Tried to deliver but no one was home",
+        "expected": {
+          "expected_intent": "delivery_attempted",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delivery_attempted",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t23",
+        "session_id": "eval_t23__run_1770777279",
+        "message": "Courier attempted delivery. Need redelivery",
+        "expected": {
+          "expected_intent": "delivery_attempted",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delivery_attempted",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t24",
+        "session_id": "eval_t24__run_1770777279",
+        "message": "Package damaged",
+        "expected": {
+          "expected_intent": "damaged",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "damaged",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t25",
+        "session_id": "eval_t25__run_1770777279",
+        "message": "Box is broken and item is damaged",
+        "expected": {
+          "expected_intent": "damaged",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "damaged",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t26",
+        "session_id": "eval_t26__run_1770777279",
+        "message": "My order arrived broken",
+        "expected": {
+          "expected_intent": "damaged",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "damaged",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t27",
+        "session_id": "eval_t27__run_1770777279",
+        "message": "Returned to sender",
+        "expected": {
+          "expected_intent": "return_to_sender",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "return_to_sender",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t28",
+        "session_id": "eval_t28__run_1770777279",
+        "message": "It got RTS by the courier",
+        "expected": {
+          "expected_intent": "return_to_sender",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "return_to_sender",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t29",
+        "session_id": "eval_t29__run_1770777279",
+        "message": "My package was returned. Need resend",
+        "expected": {
+          "expected_intent": "return_to_sender",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "return_to_sender",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t30",
+        "session_id": "eval_t30__run_1770777279",
+        "message": "My shipment is delayed",
+        "expected": {
+          "expected_intent": "delayed",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delayed",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t31",
+        "session_id": "eval_t31__run_1770777279",
+        "message": "Why is my delivery late?",
+        "expected": {
+          "expected_intent": "delayed",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delayed",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t32",
+        "session_id": "eval_t32__run_1770777279",
+        "message": "It\u2019s not coming on time, delayed",
+        "expected": {
+          "expected_intent": "delayed",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delayed",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t33",
+        "session_id": "eval_t33__run_1770777279",
+        "message": "Tracking not moving for 3 days",
+        "expected": {
+          "expected_intent": "stuck_in_transit",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "stuck_in_transit",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t34",
+        "session_id": "eval_t34__run_1770777279",
+        "message": "Package stuck in transit",
+        "expected": {
+          "expected_intent": "stuck_in_transit",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "stuck_in_transit",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t35",
+        "session_id": "eval_t35__run_1770777279",
+        "message": "Shipment has no movement",
+        "expected": {
+          "expected_intent": "stuck_in_transit",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "stuck_in_transit",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t36",
+        "session_id": "eval_t36__run_1770777279",
+        "message": "Order A1004, anju@example.com",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": false,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+          "intent": "track_order",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "status_update",
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t37",
+        "session_id": "eval_t37__run_1770777279",
+        "message": "A1004 anju@example.com",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": false,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+          "intent": "track_order",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "status_update",
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t38",
+        "session_id": "eval_t38__run_1770777279",
+        "message": "Email anju@example.com order A1004",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": false,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+          "intent": "track_order",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "status_update",
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t39",
+        "session_id": "eval_t39__run_1770777279",
+        "message": "Delivered but not received. Order A1004 anju@example.com",
+        "expected": {
+          "expected_intent": "delivered_not_received",
+          "expected_followup": false,
+          "expected_case_created": true,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "I\u2019m escalating this to a human support agent. I created a case (CASE-288B7C55). A support agent will follow up.",
+          "intent": "delivered_not_received",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "escalate",
+          "tool": "create_case",
+          "case_id": "CASE-288B7C55",
+          "case_event": "create"
+        },
+        "pass": true
+      },
+      {
+        "id": "t40",
+        "session_id": "eval_t40__run_1770777279",
+        "message": "It says delivered but not received. A1004 / anju@example.com",
+        "expected": {
+          "expected_intent": "delivered_not_received",
+          "expected_followup": false,
+          "expected_case_created": true,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "I\u2019m escalating this to a human support agent. I created a case (CASE-FA621BEB). A support agent will follow up.",
+          "intent": "delivered_not_received",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "escalate",
+          "tool": "create_case",
+          "case_id": "CASE-FA621BEB",
+          "case_event": "create"
+        },
+        "pass": true
+      },
+      {
+        "id": "t41",
+        "session_id": "eval_t41__run_1770777279",
+        "message": "Delivered but I didn't get it. Order A1004, email anju@example.com",
+        "expected": {
+          "expected_intent": "delivered_not_received",
+          "expected_followup": false,
+          "expected_case_created": true,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "I\u2019m escalating this to a human support agent. I created a case (CASE-28B5D45D). A support agent will follow up.",
+          "intent": "delivered_not_received",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "escalate",
+          "tool": "create_case",
+          "case_id": "CASE-28B5D45D",
+          "case_event": "create"
+        },
+        "pass": true
+      },
+      {
+        "id": "t42",
+        "session_id": "eval_t42__run_1770777279",
+        "message": "Delivered but not received",
+        "expected": {
+          "expected_intent": "delivered_not_received",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delivered_not_received",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t43",
+        "session_id": "eval_t43__run_1770777279",
+        "message": "Order A1004, anju@example.com",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": false,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+          "intent": "track_order",
+          "missing_fields": [],
+          "confidence": 0.55,
+          "decision": "status_update",
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t44",
+        "session_id": "eval_t44__run_1770777279",
+        "message": "Still not received",
+        "expected": {
+          "expected_intent": "delivered_not_received",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "delivered_not_received",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t45",
+        "session_id": "eval_t45__run_1770777279",
+        "message": "Where is my package?",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "track_order",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t46",
+        "session_id": "eval_t46__run_1770777279",
+        "message": "Track my order please",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "track_order",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t47",
+        "session_id": "eval_t47__run_1770777279",
+        "message": "Need tracking update",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "track_order",
+          "missing_fields": [
+            "order_id",
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t48",
+        "session_id": "eval_t48__run_1770777279",
+        "message": "A1004",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "track_order",
+          "missing_fields": [
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t49",
+        "session_id": "eval_t49__run_1770777279",
+        "message": "anju@example.com",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "track_order",
+          "missing_fields": [
+            "order_id"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      },
+      {
+        "id": "t50",
+        "session_id": "eval_t50__run_1770777279",
+        "message": "Order is A1004",
+        "expected": {
+          "expected_intent": "track_order",
+          "expected_followup": true,
+          "expected_case_created": false,
+          "expected_reuse_case": null
+        },
+        "got": {
+          "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+          "intent": "track_order",
+          "missing_fields": [
+            "email"
+          ],
+          "confidence": 0.55,
+          "decision": null,
+          "tool": null,
+          "case_id": null,
+          "case_event": "none"
+        },
+        "pass": true
+      }
+    ]
+  },
+  "suites": {
+    "core": {
+      "total": 50,
+      "passed": 49,
+      "failed": 1,
+      "pass_rate": 98.0,
+      "metrics": {
+        "intent": {
+          "labels": [
+            "damaged",
+            "delayed",
+            "delivered_not_received",
+            "delivery_attempted",
+            "return_to_sender",
+            "stuck_in_transit",
+            "track_order"
+          ],
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_label": {
+            "damaged": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "delayed": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            },
+            "delivered_not_received": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 12
+            },
+            "delivery_attempted": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "return_to_sender": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "stuck_in_transit": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "track_order": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 19
+            }
+          },
+          "confusion_matrix": {
+            "damaged": {
+              "damaged": 4,
+              "delayed": 0,
+              "delivered_not_received": 0,
+              "delivery_attempted": 0,
+              "return_to_sender": 0,
+              "stuck_in_transit": 0,
+              "track_order": 0
+            },
+            "delayed": {
+              "damaged": 0,
+              "delayed": 3,
+              "delivered_not_received": 0,
+              "delivery_attempted": 0,
+              "return_to_sender": 0,
+              "stuck_in_transit": 0,
+              "track_order": 0
+            },
+            "delivered_not_received": {
+              "damaged": 0,
+              "delayed": 0,
+              "delivered_not_received": 12,
+              "delivery_attempted": 0,
+              "return_to_sender": 0,
+              "stuck_in_transit": 0,
+              "track_order": 0
+            },
+            "delivery_attempted": {
+              "damaged": 0,
+              "delayed": 0,
+              "delivered_not_received": 0,
+              "delivery_attempted": 4,
+              "return_to_sender": 0,
+              "stuck_in_transit": 0,
+              "track_order": 0
+            },
+            "return_to_sender": {
+              "damaged": 0,
+              "delayed": 0,
+              "delivered_not_received": 0,
+              "delivery_attempted": 0,
+              "return_to_sender": 4,
+              "stuck_in_transit": 0,
+              "track_order": 0
+            },
+            "stuck_in_transit": {
+              "damaged": 0,
+              "delayed": 0,
+              "delivered_not_received": 0,
+              "delivery_attempted": 0,
+              "return_to_sender": 0,
+              "stuck_in_transit": 4,
+              "track_order": 0
+            },
+            "track_order": {
+              "damaged": 0,
+              "delayed": 0,
+              "delivered_not_received": 0,
+              "delivery_attempted": 0,
+              "return_to_sender": 0,
+              "stuck_in_transit": 0,
+              "track_order": 19
+            }
+          }
+        },
+        "followup_accuracy": 0.98,
+        "case_created_accuracy": 0.98,
+        "reuse_case_accuracy": 1.0,
+        "task_success_rate": 98.0
+      },
+      "failures": [
+        {
+          "id": "t13",
+          "session_id": "eval_t13__run_1770777279",
+          "reasons": [
+            "followup mismatch: expected_followup=True asked=False",
+            "case_created mismatch: expected_case_created=False got_exists=True tool=reuse_case"
+          ],
+          "got": {
+            "reply": "I\u2019m escalating this to a human support agent. I already have an open case (CASE-9916D71A) for this session. A support agent will follow up.",
+            "intent": "delivered_not_received",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "escalate",
+            "tool": "reuse_case",
+            "case_id": "CASE-9916D71A",
+            "case_event": "reuse"
+          }
+        }
+      ],
+      "results": [
+        {
+          "id": "t01",
+          "session_id": "eval_t01__run_1770777279",
+          "message": "Delivered but not received",
+          "expected": {
+            "expected_intent": "delivered_not_received",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "delivered_not_received",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t02",
+          "session_id": "eval_t02__run_1770777279",
+          "message": "It says delivered but I did not receive it",
+          "expected": {
+            "expected_intent": "delivered_not_received",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "delivered_not_received",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t03",
+          "session_id": "eval_t03__run_1770777279",
+          "message": "Order A1004 delivered but not received. Email anju@example.com",
+          "expected": {
+            "expected_intent": "delivered_not_received",
+            "expected_followup": false,
+            "expected_case_created": true,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "I\u2019m escalating this to a human support agent. I already have an open case (CASE-9C6A7130) for this session. A support agent will follow up.",
+            "intent": "delivered_not_received",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "escalate",
+            "tool": "reuse_case",
+            "case_id": "CASE-9C6A7130",
+            "case_event": "reuse"
+          },
+          "pass": true
+        },
+        {
+          "id": "t04",
+          "session_id": "eval_t04__run_1770777279",
+          "message": "Delivery was attempted today, what should I do?",
+          "expected": {
+            "expected_intent": "delivery_attempted",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "delivery_attempted",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t05",
+          "session_id": "eval_t05__run_1770777279",
+          "message": "My package arrived damaged",
+          "expected": {
+            "expected_intent": "damaged",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "damaged",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t06",
+          "session_id": "eval_t06__run_1770777279",
+          "message": "My order is stuck and not moving for 5 days",
+          "expected": {
+            "expected_intent": "stuck_in_transit",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "stuck_in_transit",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t07",
+          "session_id": "eval_t07__run_1770777279",
+          "message": "Tracking shows returned to sender",
+          "expected": {
+            "expected_intent": "return_to_sender",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "return_to_sender",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t08",
+          "session_id": "eval_t08__run_1770777279",
+          "message": "Where is my order?",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "track_order",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t09",
+          "session_id": "eval_t09__run_1770777279",
+          "message": "Order A1002 email test@example.com",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": false,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "That email doesn\u2019t match the order on file. Please double-check and try again.",
+            "intent": "track_order",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t10",
+          "session_id": "eval_t10__run_1770777279",
+          "message": "Order A1003 email test@example.com",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": false,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "That email doesn\u2019t match the order on file. Please double-check and try again.",
+            "intent": "track_order",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t11",
+          "session_id": "eval_t11__run_1770777279",
+          "message": "Order A1001 email test@example.com",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": false,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "That email doesn\u2019t match the order on file. Please double-check and try again.",
+            "intent": "track_order",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t12",
+          "session_id": "eval_t12__run_1770777279",
+          "message": "Order A1004, anju@example.com",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": false,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+            "intent": "track_order",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "status_update",
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t13",
+          "session_id": "eval_t13__run_1770777279",
+          "message": "Delivered but not received",
+          "expected": {
+            "expected_intent": "delivered_not_received",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "I\u2019m escalating this to a human support agent. I already have an open case (CASE-9916D71A) for this session. A support agent will follow up.",
+            "intent": "delivered_not_received",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "escalate",
+            "tool": "reuse_case",
+            "case_id": "CASE-9916D71A",
+            "case_event": "reuse"
+          },
+          "pass": false
+        },
+        {
+          "id": "t14",
+          "session_id": "eval_t13__run_1770777279",
+          "message": "Order A1004, anju@example.com",
+          "expected": {
+            "expected_intent": "delivered_not_received",
+            "expected_followup": false,
+            "expected_case_created": true,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "I\u2019m escalating this to a human support agent. I already have an open case (CASE-9916D71A) for this session. A support agent will follow up.",
+            "intent": "delivered_not_received",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "escalate",
+            "tool": "reuse_case",
+            "case_id": "CASE-9916D71A",
+            "case_event": "reuse"
+          },
+          "pass": true
+        },
+        {
+          "id": "t15",
+          "session_id": "eval_t13__run_1770777279",
+          "message": "Still not received",
+          "expected": {
+            "expected_intent": "delivered_not_received",
+            "expected_followup": false,
+            "expected_case_created": true,
+            "expected_reuse_case": true
+          },
+          "got": {
+            "reply": "I\u2019m escalating this to a human support agent. I already have an open case (CASE-9916D71A) for this session. A support agent will follow up.",
+            "intent": "delivered_not_received",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "escalate",
+            "tool": "reuse_case",
+            "case_id": "CASE-9916D71A",
+            "case_event": "reuse"
+          },
+          "pass": true
+        },
+        {
+          "id": "t16",
+          "session_id": "eval_t16__run_1770777279",
+          "message": "A1004 anju@example.com",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": false,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+            "intent": "track_order",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "status_update",
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t17",
+          "session_id": "eval_t17__run_1770777279",
+          "message": "Order A1004 delivered but not received",
+          "expected": {
+            "expected_intent": "delivered_not_received",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "delivered_not_received",
+            "missing_fields": [
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t18",
+          "session_id": "eval_t18__run_1770777279",
+          "message": "Email anju@example.com order A1004",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": false,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+            "intent": "track_order",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "status_update",
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t19",
+          "session_id": "eval_t19__run_1770777279",
+          "message": "I want to cancel my subscription",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "track_order",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t20",
+          "session_id": "eval_t20__run_1770777279",
+          "message": "x",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "track_order",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t21",
+          "session_id": "eval_t21__run_1770777279",
+          "message": "Delivery attempted",
+          "expected": {
+            "expected_intent": "delivery_attempted",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "delivery_attempted",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t22",
+          "session_id": "eval_t22__run_1770777279",
+          "message": "Tried to deliver but no one was home",
+          "expected": {
+            "expected_intent": "delivery_attempted",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "delivery_attempted",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t23",
+          "session_id": "eval_t23__run_1770777279",
+          "message": "Courier attempted delivery. Need redelivery",
+          "expected": {
+            "expected_intent": "delivery_attempted",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "delivery_attempted",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t24",
+          "session_id": "eval_t24__run_1770777279",
+          "message": "Package damaged",
+          "expected": {
+            "expected_intent": "damaged",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "damaged",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t25",
+          "session_id": "eval_t25__run_1770777279",
+          "message": "Box is broken and item is damaged",
+          "expected": {
+            "expected_intent": "damaged",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "damaged",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t26",
+          "session_id": "eval_t26__run_1770777279",
+          "message": "My order arrived broken",
+          "expected": {
+            "expected_intent": "damaged",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "damaged",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t27",
+          "session_id": "eval_t27__run_1770777279",
+          "message": "Returned to sender",
+          "expected": {
+            "expected_intent": "return_to_sender",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "return_to_sender",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t28",
+          "session_id": "eval_t28__run_1770777279",
+          "message": "It got RTS by the courier",
+          "expected": {
+            "expected_intent": "return_to_sender",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "return_to_sender",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t29",
+          "session_id": "eval_t29__run_1770777279",
+          "message": "My package was returned. Need resend",
+          "expected": {
+            "expected_intent": "return_to_sender",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "return_to_sender",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t30",
+          "session_id": "eval_t30__run_1770777279",
+          "message": "My shipment is delayed",
+          "expected": {
+            "expected_intent": "delayed",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "delayed",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t31",
+          "session_id": "eval_t31__run_1770777279",
+          "message": "Why is my delivery late?",
+          "expected": {
+            "expected_intent": "delayed",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "delayed",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t32",
+          "session_id": "eval_t32__run_1770777279",
+          "message": "It\u2019s not coming on time, delayed",
+          "expected": {
+            "expected_intent": "delayed",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "delayed",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t33",
+          "session_id": "eval_t33__run_1770777279",
+          "message": "Tracking not moving for 3 days",
+          "expected": {
+            "expected_intent": "stuck_in_transit",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "stuck_in_transit",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t34",
+          "session_id": "eval_t34__run_1770777279",
+          "message": "Package stuck in transit",
+          "expected": {
+            "expected_intent": "stuck_in_transit",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "stuck_in_transit",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t35",
+          "session_id": "eval_t35__run_1770777279",
+          "message": "Shipment has no movement",
+          "expected": {
+            "expected_intent": "stuck_in_transit",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "stuck_in_transit",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t36",
+          "session_id": "eval_t36__run_1770777279",
+          "message": "Order A1004, anju@example.com",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": false,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+            "intent": "track_order",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "status_update",
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t37",
+          "session_id": "eval_t37__run_1770777279",
+          "message": "A1004 anju@example.com",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": false,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+            "intent": "track_order",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "status_update",
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t38",
+          "session_id": "eval_t38__run_1770777279",
+          "message": "Email anju@example.com order A1004",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": false,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+            "intent": "track_order",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "status_update",
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t39",
+          "session_id": "eval_t39__run_1770777279",
+          "message": "Delivered but not received. Order A1004 anju@example.com",
+          "expected": {
+            "expected_intent": "delivered_not_received",
+            "expected_followup": false,
+            "expected_case_created": true,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "I\u2019m escalating this to a human support agent. I already have an open case (CASE-288B7C55) for this session. A support agent will follow up.",
+            "intent": "delivered_not_received",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "escalate",
+            "tool": "reuse_case",
+            "case_id": "CASE-288B7C55",
+            "case_event": "reuse"
+          },
+          "pass": true
+        },
+        {
+          "id": "t40",
+          "session_id": "eval_t40__run_1770777279",
+          "message": "It says delivered but not received. A1004 / anju@example.com",
+          "expected": {
+            "expected_intent": "delivered_not_received",
+            "expected_followup": false,
+            "expected_case_created": true,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "I\u2019m escalating this to a human support agent. I already have an open case (CASE-FA621BEB) for this session. A support agent will follow up.",
+            "intent": "delivered_not_received",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "escalate",
+            "tool": "reuse_case",
+            "case_id": "CASE-FA621BEB",
+            "case_event": "reuse"
+          },
+          "pass": true
+        },
+        {
+          "id": "t41",
+          "session_id": "eval_t41__run_1770777279",
+          "message": "Delivered but I didn't get it. Order A1004, email anju@example.com",
+          "expected": {
+            "expected_intent": "delivered_not_received",
+            "expected_followup": false,
+            "expected_case_created": true,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "I\u2019m escalating this to a human support agent. I already have an open case (CASE-28B5D45D) for this session. A support agent will follow up.",
+            "intent": "delivered_not_received",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "escalate",
+            "tool": "reuse_case",
+            "case_id": "CASE-28B5D45D",
+            "case_event": "reuse"
+          },
+          "pass": true
+        },
+        {
+          "id": "t42",
+          "session_id": "eval_t42__run_1770777279",
+          "message": "Delivered but not received",
+          "expected": {
+            "expected_intent": "delivered_not_received",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "delivered_not_received",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t43",
+          "session_id": "eval_t43__run_1770777279",
+          "message": "Order A1004, anju@example.com",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": false,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "Thanks \u2014 I found your order.\nCurrent shipment status: delivered.",
+            "intent": "track_order",
+            "missing_fields": [],
+            "confidence": 0.55,
+            "decision": "status_update",
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t44",
+          "session_id": "eval_t44__run_1770777279",
+          "message": "Still not received",
+          "expected": {
+            "expected_intent": "delivered_not_received",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "delivered_not_received",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t45",
+          "session_id": "eval_t45__run_1770777279",
+          "message": "Where is my package?",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "track_order",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t46",
+          "session_id": "eval_t46__run_1770777279",
+          "message": "Track my order please",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "track_order",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t47",
+          "session_id": "eval_t47__run_1770777279",
+          "message": "Need tracking update",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "track_order",
+            "missing_fields": [
+              "order_id",
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t48",
+          "session_id": "eval_t48__run_1770777279",
+          "message": "A1004",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "track_order",
+            "missing_fields": [
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t49",
+          "session_id": "eval_t49__run_1770777279",
+          "message": "anju@example.com",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "track_order",
+            "missing_fields": [
+              "order_id"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        },
+        {
+          "id": "t50",
+          "session_id": "eval_t50__run_1770777279",
+          "message": "Order is A1004",
+          "expected": {
+            "expected_intent": "track_order",
+            "expected_followup": true,
+            "expected_case_created": false,
+            "expected_reuse_case": null
+          },
+          "got": {
+            "reply": "To help you, I need a couple details:\n1) Your order ID (example: A1004)\n2) The email used for the order\n",
+            "intent": "track_order",
+            "missing_fields": [
+              "email"
+            ],
+            "confidence": 0.55,
+            "decision": null,
+            "tool": null,
+            "case_id": null,
+            "case_event": "none"
+          },
+          "pass": true
+        }
+      ]
     }
-  ]
+  }
 }
