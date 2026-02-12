@@ -15,11 +15,11 @@ WISMO (Where Is My Order) chatbot using LangGraph, FastAPI, Firestore, and Cloud
 
 WISMO Bot is a production‑oriented customer support assistant that:
 
--   Understands user intent from natural language\
--   Retrieves order and tracking information via tools\
--   Applies business policies to decide next actions\
--   Escalates to human agents when required\
--   Maintains session memory in Firestore\
+-   Understands user intent from natural language
+-   Retrieves order and tracking information via tools
+-   Applies business policies to decide next actions
+-   Escalates to human agents when required
+-   Maintains session memory in Firestore
 -   Exposes both API and simple UI
 
 The design separates **language understanding** from **business logic**,
