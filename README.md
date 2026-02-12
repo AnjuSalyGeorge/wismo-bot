@@ -32,26 +32,26 @@ ensuring predictable behavior suitable for real support environments.
 ### Components
 
 1.  **FastAPI Service**
-    -   `/chat` -- authenticated API endpoint\
-    -   `/ui/chat` -- browser demo endpoint\
+    -   `/chat` -- authenticated API endpoint
+    -   `/ui/chat` -- browser demo endpoint
     -   `/health` -- readiness check
 2.  **LangGraph Agent**
-    -   State machine orchestration\
-    -   Intent extraction via LLM or stub mode\
-    -   Tool calling for data retrieval\
+    -   State machine orchestration
+    -   Intent extraction via LLM or stub mode
+    -   Tool calling for data retrieval
     -   Policy evaluation before response
 3.  **Tools Layer**
-    -   Order lookup\
-    -   Tracking lookup\
-    -   Case creation / reuse\
+    -   Order lookup
+    -   Tracking lookup
+    -   Case creation / reuse
     -   Action logging
 4.  **Data & Memory (Firestore)**
-    -   Session state\
-    -   Action audit logs\
+    -   Session state
+    -   Action audit logs
     -   Escalation cases
 5.  **Evaluation Harness**
-    -   Automated JSONL test suite\
-    -   Intent & policy metrics\
+    -   Automated JSONL test suite
+    -   Intent & policy metrics
     -   Regression protection
 
 ### Flow
@@ -63,12 +63,12 @@ required)
 
 ## Features
 
--   Multi‑turn conversation with memory\
--   Deterministic policy decisions\
--   Human escalation workflow\
--   Rate limiting & payload guards\
--   API key protection\
--   Local LLM or deploy‑safe stub\
+-   Multi‑turn conversation with memory
+-   Deterministic policy decisions
+-   Human escalation workflow
+-   Rate limiting & payload guards
+-   API key protection
+-   Local LLM or deploy‑safe stub
 -   Automated evaluation metrics
 
 ------------------------------------------------------------------------
@@ -108,9 +108,9 @@ PYTHONPATH=. python eval/run_eval.py
 
 Outputs:
 
--   Intent accuracy & macro F1\
--   Follow‑up accuracy\
--   Case creation accuracy\
+-   Intent accuracy & macro F1
+-   Follow‑up accuracy
+-   Case creation accuracy
 -   Detailed failure report
 
 ------------------------------------------------------------------------
@@ -143,30 +143,30 @@ POST /chat
 
 ## Security & Guardrails
 
--   API key authentication\
--   Rate limiting per IP/key\
--   Max payload size\
--   Deterministic policy layer\
+-   API key authentication
+-   Rate limiting per IP/key
+-   Max payload size
+-   Deterministic policy layer
 -   Audit logging
 
 ------------------------------------------------------------------------
 
 ## Repository Structure
 
--   app/ -- FastAPI & LangGraph\
--   tools/ -- integrations\
--   policies/ -- business rules\
--   eval/ -- test harness\
+-   app/ -- FastAPI & LangGraph
+-   tools/ -- integrations
+-   policies/ -- business rules
+-   eval/ -- test harness
 -   docs/ -- diagrams
 
 ------------------------------------------------------------------------
 
 ## Future Enhancements
 
--   Real carrier integration\
--   Authentication portal\
--   Analytics dashboard\
--   SLA timers\
+-   Real carrier integration
+-   Authentication portal
+-   Analytics dashboard
+-   SLA timers
 -   Voice interface
 
 ------------------------------------------------------------------------
