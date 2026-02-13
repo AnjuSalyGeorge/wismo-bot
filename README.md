@@ -61,24 +61,12 @@ required)
 
 ------------------------------------------------------------------------
 
-## Features
-
--   Multi‑turn conversation with memory
--   Deterministic policy decisions
--   Human escalation workflow
--   Rate limiting & payload guards
--   API key protection
--   Local LLM or deploy‑safe stub
--   Automated evaluation metrics
-
-------------------------------------------------------------------------
-
 ## Modes
 
-  Mode             Purpose
-  ---------------- --------------------------------------------
-  LLM_MODE=local   Use Ollama for real intent understanding
-  LLM_MODE=stub    Deterministic regex intents for deployment
+| Mode           | Purpose |
+|----------------|---------|
+| `LLM_MODE=local` | Use Ollama for real intent understanding |
+| `LLM_MODE=stub`  | Deterministic regex-based intent routing for deployment |
 
 ------------------------------------------------------------------------
 
