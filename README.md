@@ -1,4 +1,4 @@
-## WISMO Bot (Where Is My Order) — LangGraph + FastAPI + Firestore
+## WISMO Bot (Where Is My Order) - LangGraph + FastAPI + Firestore
 WISMO (Where Is My Order) chatbot using LangGraph, FastAPI, Firestore, and Cloud Run with tool-calling, policies, and human escalation.
 ### Key Features
 - **LangGraph agent flow**: intake → understand → retrieve → decide
